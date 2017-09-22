@@ -7,7 +7,7 @@ KNNClassifier::KNNClassifier(vector<MyData> X, int k):BaseClassifier(X) {
 	this->k = k;
 }
 
-bool compfunc(pair<int, float> a, pair<int, float> b) {
+bool compfunc(pair<int, double> a, pair<int, double> b) {
 	return a.second < b.second;
 }
 
@@ -19,10 +19,10 @@ int KNNClassifier::prediction(MyData t) {
 		return -1;
 	}
 
-	vector<pair<int, float>> dis_matrix;
+	vector<pair<int, double>> dis_matrix;
 
 	for (int i = 0; i < vsize; i++) {
-		dis_matrix.push_back(pair<int, float>(X[i].label, euDistance(t, X[i])));
+		dis_matrix.push_back(pair<int, double>(X[i].label, euDistance(t, X[i])));
 	}
 
 	partial_sort(dis_matrix.begin(),dis_matrix.begin()+k, dis_matrix.end(), compfunc);
@@ -30,6 +30,7 @@ int KNNClassifier::prediction(MyData t) {
 	int fcount = 1, maxfcount = 1;
 	int pre_class = dis_matrix[0].first;
 	int max_class = pre_class;
+
 	for (int i = 1; i < k; i++) {
 		if (dis_matrix[i].first == pre_class) {
 			fcount++;
@@ -68,7 +69,7 @@ void KNNClassifier::setK(int k) {
 	this->k = k;
 }
 
-float KNNClassifier::euDistance(MyData a, MyData b) {
+double KNNClassifier::euDistance(MyData a, MyData b) {
 
 	if (a.features.size() != b.features.size()) {
 		cout << "Euclidean distance error, size mismatch.\n";
@@ -76,7 +77,7 @@ float KNNClassifier::euDistance(MyData a, MyData b) {
 	}
 
 	int vsize = a.features.size();
-	float tempsquare = 0;
+	double tempsquare = 0;
 	for (int i = 0; i < vsize; i++) {
 		tempsquare += pow(a.features[i] - b.features[i], 2);
 	}

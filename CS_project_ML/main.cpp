@@ -11,8 +11,8 @@ int main() {
 	int k = 3;
 	//------------------------
 
-	float validation_err = 0;
-	float accuracy;
+	double validation_err = 0;
+	double accuracy;
 	int wrong_count = 0;
 
 	for (int i = 1; i <= 10; i++) {
@@ -30,9 +30,23 @@ int main() {
 		//printing result
 		wrong_count = checkResult(result, T);
 		validation_err += wrong_count;
-		accuracy = (float)(T.size() - wrong_count) / (float)T.size() * 100;
+		accuracy = (double)(T.size() - wrong_count) / (double)T.size() * 100;
 		cout << "Fold " << i << " done with accuracy " << accuracy << "%" << endl;
 
+		//addtional testing
+		/*if (i == 10) {
+			int vsize = result.size();
+			for (int j = 0; j < vsize; j++) {
+				if (result[j] != T[j].label) {
+					cout << "Data No." << T[j].num << " should be " << T[j].label << endl;
+					cout << "But labeled as " << result[j] << endl;
+				}
+			}
+		}*/
+
+		X.clear();
+		T.clear();
+		wrong_count = 0;
 	}
 
 	validation_err /= 10;

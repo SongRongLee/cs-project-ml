@@ -6,11 +6,11 @@ using namespace std;
 class MyData
 {
 public:
-	vector<float> features;
+	vector<double> features;
 	int num, label;
 public:
 	MyData();
-	MyData(int num, vector<float> features, int label);
+	MyData(int num, vector<double> features, int label);
 };
 
 #endif 

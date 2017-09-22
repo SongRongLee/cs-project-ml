@@ -18,7 +18,7 @@ public:
 	vector<int> prediction(vector<MyData> T);
 	void setK(int k);
 private:
-	float euDistance(MyData a, MyData b);
+	double euDistance(MyData a, MyData b);
 };
 
 #endif

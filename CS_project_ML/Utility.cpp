@@ -27,7 +27,7 @@ void extractData(vector<MyData> &X, vector<MyData> &T, string dirname, int foldn
 		in >> temp_data.num >> comma;
 		infold >> fold_data;
 		for (int j = 0; j < feature_num; j++) {
-			float temp;
+			double temp;
 			in >> temp >> comma;
 			temp_data.features.push_back(temp);
 		}
