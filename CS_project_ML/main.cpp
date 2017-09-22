@@ -1,32 +1,38 @@
 #include<iostream>
 #include"KNNClassifier.h"
 #include"Utility.h"
+#include"MyData.h"
 using namespace std;
 
 int main() {
 
+	//---user define params---
 	string dirname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\d1-7_s\\d1_s";
+	int k = 3;
+	//------------------------
+
 	float validation_err = 0;
 	float accuracy;
 	int wrong_count = 0;
 
-	for (int i = i; i <= 10; i++) {
+	for (int i = 1; i <= 10; i++) {
 
-		vector<vector<float>> X;
-		vector<vector<float>> TX;
-		vector<int> Y;
-		vector<int> TY;
+		vector<MyData> X;
+		vector<MyData> T;
 		vector<int> result;
 
-		extractData(X, Y, TX, TY, dirname);
+		extractData(X, T, dirname, i);
 
-		KNNClassifier knn(X, Y);
-		result = knn.prediction(TX);
+		//testing
+		KNNClassifier knn(X ,k);
+		result = knn.prediction(T);
 
-		wrong_count = checkResult(result, TY);
+		//printing result
+		wrong_count = checkResult(result, T);
 		validation_err += wrong_count;
-		accuracy = (TX.size() - wrong_count) / TX.size();
+		accuracy = (float)(T.size() - wrong_count) / (float)T.size() * 100;
 		cout << "Fold " << i << " done with accuracy " << accuracy << "%" << endl;
+
 	}
 
 	validation_err /= 10;

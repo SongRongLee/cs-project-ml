@@ -5,10 +5,11 @@
 #include<fstream>
 #include<vector>
 #include<string>
+#include"MyData.h"
 
 using namespace std;
 
-void extractData(vector<vector<float>> &X, vector<int> &Y, vector<vector<float>> T, vector<int> TY, string dirname);
-int checkResult(vector<int> result, vector<int> correct);
+void extractData(vector<MyData> &X, vector<MyData> &T, string dirname, int foldnum);
+int checkResult(vector<int> result, vector<MyData> T);
 
 #endif

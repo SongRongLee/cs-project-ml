@@ -24,12 +24,24 @@
     <ClCompile Include="KNNClassifier.cpp">
       <Filter>原始程式檔</Filter>
     </ClCompile>
+    <ClCompile Include="Utility.cpp">
+      <Filter>原始程式檔</Filter>
+    </ClCompile>
+    <ClCompile Include="MyData.cpp">
+      <Filter>原始程式檔</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseClassifier.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="KNNClassifier.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="MyData.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,9 +1,17 @@
 #include"KNNClassifier.h"
 
-KNNClassifier::KNNClassifier() {}
-KNNClassifier::KNNClassifier(vector<vector<float>> X, vector<int> Y):BaseClassifier(X,Y) {}
+KNNClassifier::KNNClassifier() {
+	k = 1;
+}
+KNNClassifier::KNNClassifier(vector<MyData> X, int k):BaseClassifier(X) {
+	this->k = k;
+}
 
-int KNNClassifier::prediction(vector<float> t) {
+bool compfunc(pair<int, float> a, pair<int, float> b) {
+	return a.second < b.second;
+}
+
+int KNNClassifier::prediction(MyData t) {
 
 	int vsize = X.size();
 	if (vsize == 0) {
@@ -11,23 +19,37 @@ int KNNClassifier::prediction(vector<float> t) {
 		return -1;
 	}
 
-	float min_dis = euDistance(X[0], t), temp_dis;
-	int min_index = 0;	
+	vector<pair<int, float>> dis_matrix;
 
-	for (int i = 1; i < vsize; i++) {
-		temp_dis = euDistance(X[i], t);
-		if (temp_dis < min_dis) {
-			min_dis = temp_dis;
-			min_index = i;
+	for (int i = 0; i < vsize; i++) {
+		dis_matrix.push_back(pair<int, float>(X[i].label, euDistance(t, X[i])));
+	}
+
+	partial_sort(dis_matrix.begin(),dis_matrix.begin()+k, dis_matrix.end(), compfunc);
+
+	int fcount = 1, maxfcount = 1;
+	int pre_class = dis_matrix[0].first;
+	int max_class = pre_class;
+	for (int i = 1; i < k; i++) {
+		if (dis_matrix[i].first == pre_class) {
+			fcount++;
+			if (fcount > maxfcount) {
+				maxfcount = fcount;
+				max_class = pre_class;
+			}
+		}
+		else {
+			fcount = 1;
+			pre_class = dis_matrix[i].first;
 		}
 	}
 
-	return Y[min_index];
+	return max_class;
 }
 
-vector<int> KNNClassifier::prediction(vector<vector<float>> TX) {
+vector<int> KNNClassifier::prediction(vector<MyData> T) {
 
-	int vsize = TX.size();
+	int vsize = T.size();
 	vector<int> result;
 
 	if (vsize == 0) {
@@ -36,23 +58,27 @@ vector<int> KNNClassifier::prediction(vector<vector<float>> TX) {
 	}	
 	
 	for (int i = 0; i < vsize; i++) {		
-		result.push_back(prediction(TX[i]));
+		result.push_back(prediction(T[i]));
 	}
 	
 	return result;
 }
 
-float KNNClassifier::euDistance(vector<float> a, vector<float> b) {
+void KNNClassifier::setK(int k) {
+	this->k = k;
+}
 
-	if (a.size() != b.size()) {
+float KNNClassifier::euDistance(MyData a, MyData b) {
+
+	if (a.features.size() != b.features.size()) {
 		cout << "Euclidean distance error, size mismatch.\n";
 		return -1;
 	}
 
-	int vsize = a.size();
+	int vsize = a.features.size();
 	float tempsquare = 0;
 	for (int i = 0; i < vsize; i++) {
-		tempsquare += pow(a[i] - b[i], 2);
+		tempsquare += pow(a.features[i] - b.features[i], 2);
 	}
 	return sqrt(tempsquare);
 }

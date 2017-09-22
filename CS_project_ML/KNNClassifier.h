@@ -1,19 +1,24 @@
 #ifndef KNNCLASSIFIER_H
 #define KNNCLASSIFIER_H
 
-#include"BaseClassifier.h"
 #include<iostream>
 #include<cmath>
+#include<algorithm>
+#include"BaseClassifier.h"
+#include"MyData.h"
 
 class KNNClassifier : public BaseClassifier 
 {
+private:
+	int k;
 public:
 	KNNClassifier();
-	KNNClassifier(vector<vector<float>> X, vector<int> Y);
-	int prediction(vector<float> x);
-	vector<int> prediction(vector<vector<float>> TX);
+	KNNClassifier(vector<MyData> X, int k);
+	int prediction(MyData t);
+	vector<int> prediction(vector<MyData> T);
+	void setK(int k);
 private:
-	float euDistance(vector<float> a, vector<float> b);
+	float euDistance(MyData a, MyData b);
 };
 
 #endif
