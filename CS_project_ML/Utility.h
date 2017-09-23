@@ -11,5 +11,6 @@ using namespace std;
 
 void extractData(vector<MyData> &X, vector<MyData> &T, string dirname, int foldnum);
 int checkResult(vector<int> result, vector<MyData> T);
+double euDistance(MyData a, MyData b);
 
 #endif

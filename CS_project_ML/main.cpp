@@ -1,5 +1,5 @@
 #include<iostream>
-#include"KNNClassifier.h"
+#include"NMIClassifier.h"
 #include"Utility.h"
 #include"MyData.h"
 using namespace std;
@@ -24,8 +24,8 @@ int main() {
 		extractData(X, T, dirname, i);
 
 		//testing
-		KNNClassifier knn(X ,k);
-		result = knn.prediction(T);
+		NMIClassifier nmi(X ,k);
+		result = nmi.prediction(T);
 
 		//printing result
 		wrong_count = checkResult(result, T);

@@ -68,18 +68,3 @@ vector<int> KNNClassifier::prediction(vector<MyData> T) {
 void KNNClassifier::setK(int k) {
 	this->k = k;
 }
-
-double KNNClassifier::euDistance(MyData a, MyData b) {
-
-	if (a.features.size() != b.features.size()) {
-		cout << "Euclidean distance error, size mismatch.\n";
-		return -1;
-	}
-
-	int vsize = a.features.size();
-	double tempsquare = 0;
-	for (int i = 0; i < vsize; i++) {
-		tempsquare += pow(a.features[i] - b.features[i], 2);
-	}
-	return sqrt(tempsquare);
-}
