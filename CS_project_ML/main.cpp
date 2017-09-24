@@ -31,7 +31,7 @@ int main() {
 		wrong_count = checkResult(result, T);
 		validation_err += wrong_count;
 		accuracy = (double)(T.size() - wrong_count) / (double)T.size() * 100;
-		cout << "Fold " << i << " done with accuracy " << accuracy << "%" << endl;
+		cout << "Fold " << i << " done with accuracy " << accuracy << "%" << endl << endl;
 
 		//addtional testing
 		/*if (i == 10) {

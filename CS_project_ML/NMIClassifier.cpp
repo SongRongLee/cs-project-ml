@@ -70,9 +70,14 @@ void NMIClassifier::compute_medoid(){
 			medoids[label_idx].index = i;
 		}
 	}
+
+	//print medoids
+	for (int i = 0; i < medoids.size(); i++) {
+		cout << "medoid[" << i << "] is " << endl;
+		cout << X[medoids[i].index];
+	}
 }
-int NMIClassifier::prediction(MyData t)
-{
+int NMIClassifier::prediction(MyData t){
 	double min_dis = -1;
 	int min_label = 0;
 	/*for (int i = 0; i < medoid.size(); i++){

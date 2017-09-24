@@ -10,12 +10,13 @@ void extractData(vector<MyData> &X, vector<MyData> &T, string dirname, int foldn
 	//configure file names
 	string prefix = getPrefix(dirname);
 	string datadir = dirname + "\\" + prefix + ".data";
-	string folddir = dirname + "\\" + prefix + "_fold" + to_string(foldnum) + ".cv";
+	string foldname = prefix + "_fold" + to_string(foldnum) + ".cv";
+	string folddir = dirname + "\\" + foldname;
 
 	//start reading from .data
 	ifstream in(datadir);
 	ifstream infold(folddir);
-	cout << "reading from " << folddir << endl;
+	cout << "reading from " << foldname << endl;
 
 	int data_num, feature_num;
 	int fold_data;
