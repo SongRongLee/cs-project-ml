@@ -33,6 +33,7 @@ void TransD::performTrans(vector<vector<double>> &new_dis) {
 	for (int i = 0; i < T.size(); i++) {
 		vector<double> dis_vector(dis_matrix[X.size() + i].begin(), dis_matrix[X.size() + i].begin() + X.size());
 		T[i].knn_label = knn.prediction(T[i], dis_vector);
+		cout << "No." << T[i].num << " has class_w " << T[i].class_w << endl;
 	}
 	//to do...
 

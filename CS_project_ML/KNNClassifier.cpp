@@ -85,6 +85,9 @@ int KNNClassifier::prediction(MyData &t, vector<double> dis_vector) {
 		}
 	}
 
+	//set class weight
+	t.class_w = (double)maxfcount / (double)k;
+
 	return max_class;
 }
 
