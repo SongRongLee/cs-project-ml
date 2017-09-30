@@ -1,11 +1,13 @@
 #include"MyData.h"
 
-MyData::MyData() {}
+MyData::MyData() {
+}
 
-MyData::MyData(int num, vector<double> features, int label) {
+MyData::MyData(int num, vector<double> features, int label, bool is_train) {
 	this->num = num;
 	this->features = features;
 	this->label = label;
+	this->is_train = is_train;
 }
 
 ostream& operator << (ostream &out, MyData &d) {

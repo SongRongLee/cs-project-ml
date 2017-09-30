@@ -3,7 +3,7 @@
 NMIClassifier::NMIClassifier() {
 	k = 1;
 }
-NMIClassifier::NMIClassifier(vector<MyData> X, int k) :BaseClassifier(X) {
+NMIClassifier::NMIClassifier(vector<MyData> &X, int k) :BaseClassifier(X) {
 	this->k = k;
 }
 
@@ -16,7 +16,7 @@ void NMIClassifier::setK(int k) {
 	this->k = k;
 }
 
-vector<int> NMIClassifier::prediction(vector<MyData> T) {
+vector<int> NMIClassifier::prediction(vector<MyData> &T) {
 
 	int vsize = T.size();
 	compute_medoid();
@@ -73,11 +73,12 @@ void NMIClassifier::compute_medoid(){
 
 	//print medoids
 	for (int i = 0; i < medoids.size(); i++) {
-		cout << "medoid[" << i << "] is " << endl;
+		cout << "medoids[" << i << "] is " << endl;
 		cout << X[medoids[i].index];
+		cout << "with dis_sum = " << medoids[i].min_dis << endl << endl;;
 	}
 }
-int NMIClassifier::prediction(MyData t){
+int NMIClassifier::prediction(MyData &t){
 	double min_dis = -1;
 	int min_label = 0;
 	/*for (int i = 0; i < medoid.size(); i++){

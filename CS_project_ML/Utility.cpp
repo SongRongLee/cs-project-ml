@@ -34,15 +34,17 @@ void extractData(vector<MyData> &X, vector<MyData> &T, string dirname, int foldn
 		}
 		in >> temp_data.label;
 		if (fold_data == -1) {
+			temp_data.is_train = false;
 			T.push_back(temp_data);
 		}
 		else{
+			temp_data.is_train = true;
 			X.push_back(temp_data);
 		}		
 	}
 }
 
-int checkResult(vector<int> result, vector<MyData> T) {
+int checkResult(vector<int> &result, vector<MyData> &T) {
 	int vsize = result.size();
 	int ans = 0;
 	for (int i = 0; i < vsize; i++) {
@@ -64,4 +66,42 @@ double euDistance(MyData a, MyData b) {
 		tempsquare += pow(a.features[i] - b.features[i], 2);
 	}
 	return sqrt(tempsquare);
+}
+
+void genDismatrix(vector<MyData> &X, vector<vector<double>> &dis_matrix, int dis_type) {
+	for (int i = 0; i < X.size(); i++) {
+		vector<double> row_vector;
+		for (int j = 0; j < X.size(); j++) {
+			if (i == j) {
+				row_vector.push_back(0);
+			}
+			else if (i > j) {
+				row_vector.push_back(dis_matrix[j][i]);
+			}
+			else {
+				double temp_dis;
+				switch (dis_type)
+				{
+				case EU_DIS:
+					temp_dis = euDistance(X[i], X[j]);
+					break;
+				default:
+					temp_dis = 0;
+					break;
+				}
+				row_vector.push_back(temp_dis);
+			}
+		}
+		dis_matrix.push_back(row_vector);
+	}
+}
+
+void printDismatrix(vector<vector<double>> &dis_matrix) {
+	cout << "-----------------------------" << endl;;
+	for (int i = 0; i < dis_matrix.size(); i++) {
+		for (int j = 0; j < dis_matrix[i].size(); j++) {
+			cout <<left<<setw(15)<< dis_matrix[i][j];
+		}
+		cout << endl;
+	}
 }

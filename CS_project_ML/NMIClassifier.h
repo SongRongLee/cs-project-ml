@@ -25,10 +25,10 @@ public:
 	vector<Medoid> medoids;
 
 	NMIClassifier();
-	NMIClassifier(vector<MyData> X, int k);
+	NMIClassifier(vector<MyData> &X, int k);
 
-	int prediction(MyData t);
-	vector<int> prediction(vector<MyData> T);
+	int prediction(MyData &t);
+	vector<int> prediction(vector<MyData> &T);
 	void setK(int k);
 	void compute_medoid();
 private:

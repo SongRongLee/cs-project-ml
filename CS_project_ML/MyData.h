@@ -8,10 +8,12 @@ class MyData
 friend ostream& operator << (ostream& out, MyData& d);
 public:
 	vector<double> features;
-	int num, label;
+	int num, label, knn_label;
+	double class_w;
+	bool is_train;
 public:
 	MyData();
-	MyData(int num, vector<double> features, int label);	
+	MyData(int num, vector<double> features, int label, bool is_train);	
 };
 
 #endif 
