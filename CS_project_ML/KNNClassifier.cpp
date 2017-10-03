@@ -22,7 +22,7 @@ int KNNClassifier::prediction(MyData &t) {
 	vector<pair<int, double>> dis_vector;
 
 	for (int i = 0; i < vsize; i++) {
-		dis_vector.push_back(pair<int, double>(X[i].label, euDistance(t, X[i])));
+		dis_vector.push_back(pair<int, double>(X[i].label, calDistance(t, X[i], dis_type)));
 	}
 
 	partial_sort(dis_vector.begin(), dis_vector.begin()+k, dis_vector.end(), compfunc);

@@ -9,7 +9,7 @@ int main() {
 	//---user define params---
 	string dirname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\d1-7_s\\d1_s";
 	int k = 3;
-	int fold_num = 10;
+	int fold_num = 1;
 	//------------------------
 
 	double validation_err = 0;
@@ -28,7 +28,8 @@ int main() {
 		//testing		
 		TransD transd(X, T, k);
 		transd.performTrans(new_dis);
-		//printDismatrix(new_dis);
+		
+		printDismatrix(new_dis);
 
 		//printing result
 

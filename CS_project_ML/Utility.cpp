@@ -52,7 +52,19 @@ int checkResult(vector<int> &result, vector<MyData> &T) {
 	}
 	return ans;
 }
-
+double calDistance(MyData a, MyData b, int dis_type) {
+	double temp_dis;
+	switch (dis_type)
+	{
+	case EU_DIS:
+		temp_dis = euDistance(a, b);
+		break;
+	default:
+		temp_dis = 0;
+		break;
+	}
+	return temp_dis;
+}
 double euDistance(MyData a, MyData b) {
 
 	if (a.features.size() != b.features.size()) {
@@ -80,15 +92,7 @@ void genDismatrix(vector<MyData> &X, vector<vector<double>> &dis_matrix, int dis
 			}
 			else {
 				double temp_dis;
-				switch (dis_type)
-				{
-				case EU_DIS:
-					temp_dis = euDistance(X[i], X[j]);
-					break;
-				default:
-					temp_dis = 0;
-					break;
-				}
+				temp_dis = calDistance(X[i], X[j], dis_type);
 				row_vector.push_back(temp_dis);
 			}
 		}

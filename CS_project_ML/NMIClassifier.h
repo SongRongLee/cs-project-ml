@@ -10,8 +10,7 @@
 
 class NMIClassifier : public BaseClassifier
 {
-private:
-	int k;
+private:	
 	class Medoid
 	{
 	public:
@@ -21,18 +20,23 @@ private:
 	public:
 		Medoid(int label, double min_dis, int index);
 	};
-public:
-	vector<Medoid> medoids;
 
+	int k;
+	vector<Medoid> medoids;
+	vector<vector<double>> dis_matrix;
+public:	
 	NMIClassifier();
 	NMIClassifier(vector<MyData> &X, int k);
+	NMIClassifier(vector<MyData> &X, vector<vector<double>> &dis_matrix, int k);
 
 	int prediction(MyData &t);
 	vector<int> prediction(vector<MyData> &T);
-	void setK(int k);
-	void compute_medoid();
+	void setK(int k);	
+	void printMedoids();
+	void setDisMatrix(vector<vector<double>> &dis_matrix);
+
 private:
-	
+	void compute_medoid();
 };
 
 #endif
