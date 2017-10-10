@@ -101,11 +101,11 @@ void genDismatrix(vector<MyData> &X, vector<vector<double>> &dis_matrix, int dis
 }
 
 void printDismatrix(vector<vector<double>> &dis_matrix) {
-	cout << "-----------------------------" << endl;;
+	ofstream out("out.txt");
 	for (int i = 0; i < dis_matrix.size(); i++) {
 		for (int j = 0; j < dis_matrix[i].size(); j++) {
-			cout <<left<<setw(15)<< dis_matrix[i][j];
+			out <<left<<fixed<<setprecision(6)<<setw(9)<< dis_matrix[i][j];
 		}
-		cout << endl;
+		out << endl;
 	}
 }

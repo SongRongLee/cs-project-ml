@@ -17,15 +17,13 @@ TransD::TransD(vector<MyData> &X, vector<MyData> &T, int k){
 	total_data = X;
 	total_data.insert(total_data.end(), T.begin(), T.end());
 	genDismatrix(total_data, dis_matrix);
-
 	//set initial knn_label and class_weight
 	for (int i = 0; i < X.size(); i++) {
-		X[i].knn_label = X[i].label;
-		X[i].class_w = 1;
+		total_data[i].knn_label = total_data[i].label;
+		total_data[i].class_w = 1;
 	}
-	for (int i = 0; i < T.size(); i++) {
-		T[i].knn_label = T[i].label;
-		T[i].class_w = 1;
+	for (int i = X.size(); i < total_data.size(); i++) {
+		total_data[i].class_w = 1;
 	}
 }
 
@@ -92,18 +90,19 @@ void TransD::performTrans(vector<vector<double>> &new_dis) {
 	new_dis = dis_matrix;
 	vector<vector<int>> near_list;
 
-	for (int rc = 0; rc < round_limit; rc++) {
+	//for (int rc = 0; rc < round_limit; rc++) {
+	for (int rc = 0; rc < 1; rc++) {
 		double lambda, epsilon;
 		double r = 0.5;
-		double w;		
+		double w;
 		cout << "Round " << rc+1 << " ." << endl;
 
 		calNearList(near_list);
 		//get knn class weight and label
-		for (int i = 0; i < T.size(); i++) {
-			vector<double> dis_vector(dis_matrix[X.size() + i].begin(), dis_matrix[X.size() + i].begin() + X.size());
-			T[i].knn_label = knn.prediction(T[i], dis_vector);
-			//cout << "No." << T[i].num << " has class_w " << T[i].class_w << endl;
+		for (int i = X.size(); i < total_data.size(); i++) {
+			vector<double> dis_vector(dis_matrix[i].begin(), dis_matrix[i].begin() + X.size());
+			total_data[i].knn_label = knn.prediction(total_data[i], dis_vector);
+			cout << "No." << total_data[i].num << " classify as" << total_data[i].knn_label << endl;
 		}
 
 		//for each pair, calculate new dis
@@ -119,7 +118,7 @@ void TransD::performTrans(vector<vector<double>> &new_dis) {
 				}
 				epsilon = lambda * total_data[i].class_w * total_data[j].class_w;
 				if (r <= epsilon) {
-					//change dis
+					//change dis					
 					w = calw(i, j, near_list);
 					f = 2 / (1 + exp(-w*v));
 					if (total_data[i].knn_label == total_data[j].knn_label) {
@@ -138,20 +137,22 @@ void TransD::performTrans(vector<vector<double>> &new_dis) {
 		bool check_flag = true;
 
 		one_mi.setDisMatrix(dis_matrix);
-
+		cout << "1-nn  nmi" << endl;
 		for (int i = 0; i < T.size(); i++) {
 			vector<double> dis_vector(dis_matrix[X.size() + i].begin(), dis_matrix[X.size() + i].begin() + X.size());
 			knn_result = one_nn.prediction(T[i], dis_vector);
 			nmi_result = one_mi.prediction(T[i]);
-			if (knn_result != nmi_result) {
+			cout << knn_result << "    " << nmi_result << endl;
+			/*if (knn_result != nmi_result) {
 				check_flag = false;
 				cout << "T[" << i << "] fail, 1nn = " << knn_result << ", 1mi = " << nmi_result << endl;
 				break;
-			}
+			}*/
 		}
+		/*
 		if (check_flag) {
 			cout << "TransD done by 1-NN and 1mi match." << endl;
 			break;
-		}
+		}*/
 	}
 }

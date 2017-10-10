@@ -8,7 +8,7 @@ int main() {
 
 	//---user define params---
 	string dirname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\d1-7_s\\d1_s";
-	int k = 3;
+	int k = 1;
 	int fold_num = 1;
 	//------------------------
 
@@ -25,21 +25,23 @@ int main() {
 
 		extractData(X, T, dirname, i);
 
-		//testing		
+		//TransD testing		
 		TransD transd(X, T, k);
-		transd.performTrans(new_dis);
-		
+		transd.performTrans(new_dis);		
 		printDismatrix(new_dis);
 
-		//printing result
+		//NMI testing
+		/*NMIClassifier nmi(X, 1);
+		result = nmi.prediction(T);*/
 
+		//printing result
 		/*wrong_count = checkResult(result, T);
 		validation_err += wrong_count;
 		accuracy = (double)(T.size() - wrong_count) / (double)T.size() * 100;
 		cout << "Fold " << i << " done with accuracy " << accuracy << "%" << endl << endl;*/
 
 		//addtional testing
-		/*if (i == 10) {
+		/*if (i == 1) {
 			int vsize = result.size();
 			for (int j = 0; j < vsize; j++) {
 				if (result[j] != T[j].label) {
