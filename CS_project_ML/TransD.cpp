@@ -102,7 +102,7 @@ void TransD::performTrans(vector<vector<double>> &new_dis) {
 		for (int i = X.size(); i < total_data.size(); i++) {
 			vector<double> dis_vector(dis_matrix[i].begin(), dis_matrix[i].begin() + X.size());
 			total_data[i].knn_label = knn.prediction(total_data[i], dis_vector);
-			cout << "No." << total_data[i].num << " classify as" << total_data[i].knn_label << endl;
+			//cout << "No." << total_data[i].num << " classify as " << total_data[i].knn_label << endl;
 		}
 
 		//for each pair, calculate new dis
@@ -141,18 +141,18 @@ void TransD::performTrans(vector<vector<double>> &new_dis) {
 		for (int i = 0; i < T.size(); i++) {
 			vector<double> dis_vector(dis_matrix[X.size() + i].begin(), dis_matrix[X.size() + i].begin() + X.size());
 			knn_result = one_nn.prediction(T[i], dis_vector);
-			nmi_result = one_mi.prediction(T[i]);
+			nmi_result = one_mi.prediction(T[i], dis_vector);
 			cout << knn_result << "    " << nmi_result << endl;
-			/*if (knn_result != nmi_result) {
+			if (knn_result != nmi_result) {
 				check_flag = false;
 				cout << "T[" << i << "] fail, 1nn = " << knn_result << ", 1mi = " << nmi_result << endl;
 				break;
-			}*/
+			}
 		}
-		/*
+		
 		if (check_flag) {
 			cout << "TransD done by 1-NN and 1mi match." << endl;
 			break;
-		}*/
+		}
 	}
 }

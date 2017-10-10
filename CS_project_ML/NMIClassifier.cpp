@@ -102,6 +102,20 @@ int NMIClassifier::prediction(MyData &t){
 	return min_label;
 }
 
+int NMIClassifier::prediction(MyData &t, vector<double> dis_vector) {
+	double min_dis = -1;
+	int min_label = 0;
+
+	for (int i = 0; i < medoids.size(); i++) {
+		double temp_dis = dis_vector[medoids[i].index];
+		if (temp_dis < min_dis || min_dis < 0) {
+			min_dis = temp_dis;
+			min_label = medoids[i].label;
+		}
+	}
+	return min_label;
+}
+
 void NMIClassifier::printMedoids() {
 	for (int i = 0; i < medoids.size(); i++) {
 		cout << "medoids[" << i << "] is " << endl;

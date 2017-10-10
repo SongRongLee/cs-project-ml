@@ -3,10 +3,10 @@
 #include"Utility.h"
 #include"MyData.h"
 using namespace std;
-
 int main() {
 
 	//---user define params---
+	ofstream out("out.txt");
 	string dirname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\d1-7_s\\d1_s";
 	int k = 1;
 	int fold_num = 1;
@@ -27,8 +27,39 @@ int main() {
 
 		//TransD testing		
 		TransD transd(X, T, k);
-		transd.performTrans(new_dis);		
-		printDismatrix(new_dis);
+		transd.performTrans(new_dis);
+		for (int j = 0; j < new_dis.size(); j++) {
+			for (int k = 0; k < new_dis.size(); k++) {
+				int indexj, indexk;
+				for (int a = 0; a < X.size(); a++) {
+					if (X[a].num == j) {
+						indexj = a;
+						break;
+					}
+				}
+				for (int a = 0; a < T.size(); a++) {
+					if (T[a].num == j) {
+						indexj = a + X.size();
+						break;
+					}
+				}
+				for (int a = 0; a < X.size(); a++) {
+					if (X[a].num == k) {
+						indexk = a;
+						break;
+					}
+				}
+				for (int a = 0; a < T.size(); a++) {
+					if (T[a].num == k) {
+						indexk = a + X.size();
+						break;
+					}
+				}
+				out << left << fixed << setprecision(6) << setw(9) << new_dis[indexj][indexk];
+			}
+			out << endl;
+		}
+		//printDismatrix(new_dis);
 
 		//NMI testing
 		/*NMIClassifier nmi(X, 1);
