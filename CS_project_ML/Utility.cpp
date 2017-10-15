@@ -10,6 +10,8 @@ void extractData(vector<MyData> &X, vector<MyData> &T, string dirname, int foldn
 	//configure file names
 	string prefix = getPrefix(dirname);
 	string datadir = dirname + "\\" + prefix + ".data";
+	
+	//for folds
 	string foldname = prefix + "_fold" + to_string(foldnum) + ".cv";
 	string folddir = dirname + "\\" + foldname;
 
@@ -41,6 +43,43 @@ void extractData(vector<MyData> &X, vector<MyData> &T, string dirname, int foldn
 			temp_data.is_train = true;
 			X.push_back(temp_data);
 		}		
+	}
+}
+
+void extractData(vector<MyData> &X, vector<MyData> &XT, vector<MyData> &T, string dataname, string labelname) {
+
+	//start reading from .data
+	ifstream in(dataname);
+	ifstream infold(labelname);
+	cout << "reading from " << labelname << endl;
+
+	int data_num, feature_num;
+	int fold_data;
+	char comma;
+
+	in >> data_num >> comma >> feature_num;
+	for (int i = 0; i < data_num; i++) {
+		MyData temp_data;
+		in >> temp_data.num >> comma;
+		infold >> fold_data;
+		for (int j = 0; j < feature_num; j++) {
+			double temp;
+			in >> temp >> comma;
+			temp_data.features.push_back(temp);
+		}
+		in >> temp_data.label;
+		if (fold_data == -1) {
+			temp_data.is_train = false;
+			T.push_back(temp_data);
+		}
+		else if(fold_data == -2){
+			temp_data.is_train = false;
+			XT.push_back(temp_data);
+		}
+		else {
+			temp_data.is_train = true;
+			X.push_back(temp_data);
+		}
 	}
 }
 
@@ -107,5 +146,26 @@ void printDismatrix(vector<vector<double>> &dis_matrix) {
 			out <<left<<fixed<<setprecision(6)<<setw(9)<< dis_matrix[i][j];
 		}
 		out << endl;
+	}
+}
+
+void indexSortedMatrix(vector<MyData> &total_data, vector<vector<double>> &dis_matrix, vector<vector<double>> &new_dis) {
+	for (int j = 0; j < dis_matrix.size(); j++) {
+		for (int k = 0; k < dis_matrix.size(); k++) {
+			int indexj, indexk;
+			for (int a = 0; a < total_data.size(); a++) {
+				if (total_data[a].num == j) {
+					indexj = a;
+					break;
+				}
+			}
+			for (int a = 0; a < total_data.size(); a++) {
+				if (total_data[a].num == k) {
+					indexk = a;
+					break;
+				}
+			}
+			new_dis[j][k] = dis_matrix[indexj][indexk];
+		}
 	}
 }

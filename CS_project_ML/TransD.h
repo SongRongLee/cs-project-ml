@@ -26,6 +26,8 @@ public:
 	void setK(int k);
 	void setRoundLimit(int round_limit);
 	void performTrans(vector<vector<double>> &new_dis);
+	void performTrans(vector<vector<vector<double>>> &dis_matrixs, vector<vector<int>> &knn_results);
+	void getSortedMatrix(vector<vector<double>> &new_dis);
 };
 
 #endif

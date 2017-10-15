@@ -1,5 +1,5 @@
 #include<iostream>
-#include"TransD.h"
+#include"SemiTransD.h"
 #include"Utility.h"
 #include"MyData.h"
 using namespace std;
@@ -7,7 +7,9 @@ int main() {
 
 	//---user define params---
 	ofstream out("out.txt");
-	string dirname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\d1-7_s\\d1_s";
+	string dirname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\d1_s\\d1_s.data";
+	//string dirname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\d1-7_s\\d1_s";
+	string labelname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\d1_s\\label01.txt";
 	int k = 1;
 	int fold_num = 1;
 	//------------------------
@@ -19,49 +21,28 @@ int main() {
 	for (int i = 1; i <= fold_num; i++) {
 
 		vector<MyData> X;
+		vector<MyData> XT; //for semi-supervised
 		vector<MyData> T;
 		vector<int> result;
 		vector<vector<double>> new_dis;
 
-		extractData(X, T, dirname, i);
+		extractData(X, XT, T, dirname, labelname);
+		//extractData(X, T, dirname, i);
 
-		//TransD testing		
-		TransD transd(X, T, k);
+		//SemiTransD
+		SemiTransD stransd(X, XT, T, k);
+		stransd.preTrain();
+		/*stransd.performTrans(new_dis);
+		stransd.getSortedMatrix(new_dis);
+		printDismatrix(new_dis);*/
+
+		//TransD		
+		/*TransD transd(X, T, k);
 		transd.performTrans(new_dis);
-		for (int j = 0; j < new_dis.size(); j++) {
-			for (int k = 0; k < new_dis.size(); k++) {
-				int indexj, indexk;
-				for (int a = 0; a < X.size(); a++) {
-					if (X[a].num == j) {
-						indexj = a;
-						break;
-					}
-				}
-				for (int a = 0; a < T.size(); a++) {
-					if (T[a].num == j) {
-						indexj = a + X.size();
-						break;
-					}
-				}
-				for (int a = 0; a < X.size(); a++) {
-					if (X[a].num == k) {
-						indexk = a;
-						break;
-					}
-				}
-				for (int a = 0; a < T.size(); a++) {
-					if (T[a].num == k) {
-						indexk = a + X.size();
-						break;
-					}
-				}
-				out << left << fixed << setprecision(6) << setw(9) << new_dis[indexj][indexk];
-			}
-			out << endl;
-		}
-		//printDismatrix(new_dis);
+		transd.getSortedMatrix(new_dis);
+		printDismatrix(new_dis);*/
 
-		//NMI testing
+		//NMI
 		/*NMIClassifier nmi(X, 1);
 		result = nmi.prediction(T);*/
 
@@ -84,6 +65,7 @@ int main() {
 
 		X.clear();
 		T.clear();
+		XT.clear();
 		wrong_count = 0;
 	}
 
