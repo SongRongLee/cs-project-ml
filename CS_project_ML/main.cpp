@@ -7,7 +7,7 @@ int main() {
 
 	//---user define params---
 	ofstream out("out.txt");
-	string dirname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\d1_s\\d1_s.data";
+	string dirname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\d1_s.data";
 	//string dirname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\d1-7_s\\d1_s";
 	string labelname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\d1_s\\label01.txt";
 	int k = 1;
@@ -30,11 +30,11 @@ int main() {
 		//extractData(X, T, dirname, i);
 
 		//SemiTransD
-		SemiTransD stransd(X, XT, T, k);
-		stransd.preTrain();
-		/*stransd.performTrans(new_dis);
+		SemiTransD stransd(X, XT, k);
+		stransd.setT(T);
+		stransd.performTrans();
 		stransd.getSortedMatrix(new_dis);
-		printDismatrix(new_dis);*/
+		printDismatrix(new_dis);
 
 		//TransD		
 		/*TransD transd(X, T, k);

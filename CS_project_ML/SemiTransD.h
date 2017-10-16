@@ -19,13 +19,20 @@ private:
 	vector<MyData> XT;
 	vector<MyData> T;
 	vector<MyData> total_data;
+
+	void preTrain();
+	void fillDismatrix();
+	double calw(int a, int b, vector<vector<int>> &near_list, int round);
+	void calNearList(vector<vector<int>> &near_list, int round);
+
 public:
 	SemiTransD();
-	SemiTransD(vector<MyData> &X, vector<MyData> &XT, vector<MyData> &T, int k);
+	SemiTransD(vector<MyData> &X, vector<MyData> &XT, int k);
 	void setK(int k);
+	void setT(vector<MyData> &T);
 	void setRoundLimit(int round_limit);
-	void preTrain();
-	void performTrans(vector<vector<double>> &new_dis);
+	
+	void performTrans();
 	void getSortedMatrix(vector<vector<double>> &new_dis);
 };
 

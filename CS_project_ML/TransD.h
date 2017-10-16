@@ -23,7 +23,7 @@ private:
 public:
 	TransD();
 	TransD(vector<MyData> &X, vector<MyData> &T, int k);
-	void setK(int k);
+	void setK(int k);	
 	void setRoundLimit(int round_limit);
 	void performTrans(vector<vector<double>> &new_dis);
 	void performTrans(vector<vector<vector<double>>> &dis_matrixs, vector<vector<int>> &knn_results);

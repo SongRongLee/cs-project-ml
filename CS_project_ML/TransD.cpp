@@ -1,9 +1,5 @@
 #include"TransD.h"
 
-bool mycomp(pair<int, double> a, pair<int, double> b) {
-	return a.second < b.second;
-}
-
 TransD::TransD() {
 	k = 1;
 	round_limit = 20;
@@ -20,9 +16,6 @@ TransD::TransD(vector<MyData> &X, vector<MyData> &T, int k){
 	//set initial knn_label and class_weight
 	for (int i = 0; i < X.size(); i++) {
 		total_data[i].knn_label = total_data[i].label;
-		total_data[i].class_w = 1;
-	}
-	for (int i = X.size(); i < total_data.size(); i++) {
 		total_data[i].class_w = 1;
 	}
 }

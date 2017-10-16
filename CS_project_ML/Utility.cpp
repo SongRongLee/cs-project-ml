@@ -1,5 +1,9 @@
 #include"Utility.h"
 
+bool mycomp(pair<int, double> a, pair<int, double> b) {
+	return a.second < b.second;
+}
+
 string getPrefix(string dirname) {
 	int found;
 	found = dirname.find_last_of("\\");
@@ -120,6 +124,7 @@ double euDistance(MyData a, MyData b) {
 }
 
 void genDismatrix(vector<MyData> &X, vector<vector<double>> &dis_matrix, int dis_type) {
+	dis_matrix.clear();
 	for (int i = 0; i < X.size(); i++) {
 		vector<double> row_vector;
 		for (int j = 0; j < X.size(); j++) {
@@ -150,6 +155,7 @@ void printDismatrix(vector<vector<double>> &dis_matrix) {
 }
 
 void indexSortedMatrix(vector<MyData> &total_data, vector<vector<double>> &dis_matrix, vector<vector<double>> &new_dis) {
+	new_dis = dis_matrix;
 	for (int j = 0; j < dis_matrix.size(); j++) {
 		for (int k = 0; k < dis_matrix.size(); k++) {
 			int indexj, indexk;
