@@ -6,22 +6,38 @@
 #include<algorithm>
 #include"BaseClassifier.h"
 #include"MyData.h"
+#include"Utility.h"
 
 class NMIClassifier : public BaseClassifier
 {
-private:
+private:	
+	class Medoid
+	{
+	public:
+		int label;
+		int index;
+		double min_dis;
+	public:
+		Medoid(int label, double min_dis, int index);
+	};
+
 	int k;
-public:
-	vector<pair<int, double>> medoid;
-	vector<pair<int, int >> medoid_idx;
+	vector<Medoid> medoids;
+	vector<vector<double>> dis_matrix;
+public:	
 	NMIClassifier();
-	NMIClassifier(vector<MyData> X, int k);
-	int prediction(MyData t);
-	vector<int> prediction(vector<MyData> T);
-	void setK(int k);
-	void compute_medoid();
+	NMIClassifier(vector<MyData> &X, int k);
+	NMIClassifier(vector<MyData> &X, vector<vector<double>> &dis_matrix, int k);
+
+	int prediction(MyData &t);
+	int prediction(MyData &t, vector<double> dis_vector);
+	vector<int> prediction(vector<MyData> &T);
+	void setK(int k);	
+	void printMedoids();
+	void setDisMatrix(vector<vector<double>> &dis_matrix);
+
 private:
-	double euDistance(MyData a, MyData b);
+	void compute_medoid();
 };
 
 #endif

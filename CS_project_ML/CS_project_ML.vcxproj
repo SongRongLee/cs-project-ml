@@ -114,12 +114,18 @@
     <ClCompile Include="KNNClassifier.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyData.cpp" />
+    <ClCompile Include="NMIClassifier.cpp" />
+    <ClCompile Include="SemiTransD.cpp" />
+    <ClCompile Include="TransD.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseClassifier.h" />
     <ClInclude Include="KNNClassifier.h" />
     <ClInclude Include="MyData.h" />
+    <ClInclude Include="NMIClassifier.h" />
+    <ClInclude Include="SemiTransD.h" />
+    <ClInclude Include="TransD.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
