@@ -16,7 +16,7 @@ bool compfunc2(pair<vector<pair<int, double>>, double> a, pair<vector<pair<int, 
 	return a.second < b.second;
 }
 
-void KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
+int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 {
 	int vsize = X.size();
 	if (vsize == 0) {
@@ -156,6 +156,8 @@ void KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 	t.class_w_table = res;
 	t.class_w = max;
 	t.knn_label = res[max_idx].first;
+
+	return res[max_idx].first;
 }
 int KNNClassifier::prediction(MyData &t) {
 

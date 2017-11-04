@@ -120,10 +120,7 @@ void SemiTransD::performTrans() {
 		for (int i = train_data.size(); i < total_data.size(); i++) {
 			vector<double> dis_vector(dis_matrixs[rc][i].begin(), dis_matrixs[rc][i].begin() + train_data.size());
 
-			//change knn.prediction to bayes prediction
-			knn.bayesprediction(total_data[i], dis_vector);
-
-			//total_data[i].knn_label = knn.prediction(total_data[i], dis_vector);
+			total_data[i].knn_label = knn.prediction(total_data[i], dis_vector);
 
 			//cout << "No." << total_data[i].num << " classify as " << total_data[i].knn_label << endl;
 		}
