@@ -11,6 +11,7 @@ public:
 	int num, label, knn_label;
 	double class_w;
 	bool is_train;
+	vector<pair<int, double>> class_w_table;
 public:
 	MyData();
 	MyData(int num, vector<double> features, int label, bool is_train);	

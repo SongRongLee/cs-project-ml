@@ -1,5 +1,5 @@
-#ifndef KNNCLASSIFIER_H
-#define KNNCLASSIFIER_H
+#ifndef BAYESKNNCLASSIFIER_H
+#define BAYESKNNCLASSIFIER_H
 
 #include<iostream>
 #include<cmath>
@@ -8,18 +8,16 @@
 #include"MyData.h"
 #include"Utility.h"
 
-class KNNClassifier : public BaseClassifier 
+class bayesKNNClassifier : public BaseClassifier
 {
-private:
-	int k;
 public:
-	KNNClassifier();
-	KNNClassifier(vector<MyData> &X, int k);
+	bayesKNNClassifier();
+	bayesKNNClassifier(vector<MyData> &X, int k);
 	int prediction(MyData &t);
 	int prediction(MyData &t, vector<double> dis_vector);
-	void bayesprediction(MyData &t, vector<double> dis_vector);
 	vector<int> prediction(vector<MyData> &T);
-	void setK(int k);
 };
+
+
 
 #endif
