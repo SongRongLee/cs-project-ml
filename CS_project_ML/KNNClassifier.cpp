@@ -198,7 +198,6 @@ int KNNClassifier::prediction(MyData &t) {
 }
 
 int KNNClassifier::prediction(MyData &t, vector<double> dis_vector) {
-
 	int vsize = X.size();
 	if (vsize == 0) {
 		cout << "Prediciton error, not enough data.\n";
@@ -231,6 +230,45 @@ int KNNClassifier::prediction(MyData &t, vector<double> dis_vector) {
 		}
 	}
 
+	//set class_weight
+	t.class_w = maxfcount / k;
+
+	return max_class;
+}
+
+int KNNClassifier::prediction(MyData &t, vector<double> dis_vector) {
+
+	int vsize = X.size();
+	if (vsize == 0) {
+		cout << "Prediciton error, not enough data.\n";
+		return -1;
+	}
+
+	vector<pair<int, double>> dis_pair;
+
+	for (int i = 0; i < vsize; i++) {
+		dis_pair.push_back(pair<int, double>(X[i].label, dis_vector[i]));
+	}
+
+	partial_sort(dis_pair.begin(), dis_pair.begin() + k, dis_pair.end(), compfunc);
+
+	int fcount = 1, maxfcount = 1;
+	int pre_class = dis_pair[0].first;
+	int max_class = pre_class;
+
+	for (int i = 1; i < k; i++) {
+		if (dis_pair[i].first == pre_class) {
+			fcount++;
+			if (fcount > maxfcount) {
+				maxfcount = fcount;
+				max_class = pre_class;
+			}
+		}
+		else {
+			fcount = 1;
+			pre_class = dis_pair[i].first;
+		}
+	}
 	//set class weight
 	t.class_w = (double)maxfcount / (double)k;
 

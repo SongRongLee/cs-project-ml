@@ -82,7 +82,9 @@ void extractData(vector<MyData> &X, vector<MyData> &XT, vector<MyData> &T, strin
 		}
 		else {
 			temp_data.is_train = true;
+      //for knnbayes
 			temp_data.class_w_table.push_back(pair<int, double>(temp_data.label, 1));
+
 			X.push_back(temp_data);
 		}
 	}
