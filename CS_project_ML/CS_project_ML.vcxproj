@@ -111,6 +111,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseClassifier.cpp" />
+    <ClCompile Include="KnnBayesSemi.cpp" />
+    <ClCompile Include="KnnBayesTransD.cpp" />
     <ClCompile Include="KNNClassifier.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyData.cpp" />
@@ -121,6 +123,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseClassifier.h" />
+    <ClInclude Include="KnnBayesSemi.h" />
+    <ClInclude Include="KnnBayesTransD.h" />
     <ClInclude Include="KNNClassifier.h" />
     <ClInclude Include="MyData.h" />
     <ClInclude Include="NMIClassifier.h" />

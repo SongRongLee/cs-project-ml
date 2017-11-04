@@ -1,5 +1,5 @@
 #include<iostream>
-#include"SemiTransD.h"
+#include"KnnBayesSemi.h"
 #include"Utility.h"
 #include"MyData.h"
 using namespace std;
@@ -30,7 +30,7 @@ int main() {
 		//extractData(X, T, dirname, i);
 
 		//SemiTransD
-		SemiTransD stransd(X, XT, k);
+		KnnBayesSemi stransd(X, XT, k);
 		stransd.setT(T);
 		stransd.performTrans();
 		stransd.getSortedMatrix(new_dis);

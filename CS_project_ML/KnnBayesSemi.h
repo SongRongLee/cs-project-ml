@@ -1,1 +1,27 @@
-#pragma once
+#ifndef KNNBAYESSEMI_H
+#define KNNBAYESSEMI_H
+
+#include"SemiTransD.h"
+#include"KnnBayesTransD.h"
+
+class KnnBayesSemi : public SemiTransD
+{
+private:
+	int k;
+	int round_limit;
+	vector<vector<vector<double>>> dis_matrixs;
+	vector<vector<vector<pair<int, double>>>> knn_results;
+	vector<MyData> X;
+	vector<MyData> XT;
+	vector<MyData> T;
+	vector<MyData> total_data;
+
+	void preTrain();
+	void fillDismatrix();
+
+public:
+	KnnBayesSemi(vector<MyData> &X, vector<MyData> &XT, int k);
+	void performTrans();
+};
+
+#endif

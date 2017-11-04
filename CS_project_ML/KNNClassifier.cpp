@@ -21,7 +21,7 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 	int vsize = X.size();
 	if (vsize == 0) {
 		cout << "Prediciton error, not enough data.\n";
-		return;
+		return -1;
 	}
 	vector<pair<vector<pair<int,double>>, double>> dis_pair;
 	for (int i = 0; i < vsize; i++) {
@@ -102,11 +102,12 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 	}
 	for (int i = 0; i < table.size(); i++)
 	{
+		cout << table.size() << endl;
 		sort(table[i].begin(), table[i].end(), compfunc);
 		int id = -1;
 		for (int j = 0; j < labeled_ratio.size(); j++)
 		{
-			if (table[i][0].first = labeled_ratio[j].first)
+			if (table[i][0].first == labeled_ratio[j].first)
 			{
 				id = j;
 			}

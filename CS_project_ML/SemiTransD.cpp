@@ -104,8 +104,10 @@ double SemiTransD::calw(int a, int b, vector<vector<int>> &near_list, int round)
 }
 void SemiTransD::performTrans() {
 	double v = 0.1;
+	
 	vector<MyData> train_data(total_data.begin(), total_data.begin() + X.size() + XT.size());
 	KNNClassifier knn(train_data, k);
+	KNNClassifier first_knn(X, k);
 
 	vector<vector<int>> near_list;
 
@@ -116,18 +118,26 @@ void SemiTransD::performTrans() {
 		cout << "Round " << rc + 1 << " ." << endl;
 
 		calNearList(near_list,rc);
-		//get knn class weight and label for testing data
-		for (int i = train_data.size(); i < total_data.size(); i++) {
-			vector<double> dis_vector(dis_matrixs[rc][i].begin(), dis_matrixs[rc][i].begin() + train_data.size());
 
-			total_data[i].knn_label = knn.prediction(total_data[i], dis_vector);
+		if (rc == 0) {
+			//get knn class weight and label for testing data
+			for (int i = train_data.size(); i < total_data.size(); i++) {
+				vector<double> dis_vector(dis_matrixs[rc][i].begin(), dis_matrixs[rc][i].begin() + X.size());
+				total_data[i].knn_label = first_knn.prediction(total_data[i], dis_vector);
+			}
+		}
+		else {
+			//set knn label for XT
+			for (int i = X.size(); i < train_data.size(); i++) {
+				total_data[i].knn_label = knn_results[rc][i - X.size()];
+			}
+			//get knn class weight and label for testing data
+			for (int i = train_data.size(); i < total_data.size(); i++) {
+				vector<double> dis_vector(dis_matrixs[rc][i].begin(), dis_matrixs[rc][i].begin() + train_data.size());
+				total_data[i].knn_label = knn.prediction(total_data[i], dis_vector);
+			}
+		}
 
-			//cout << "No." << total_data[i].num << " classify as " << total_data[i].knn_label << endl;
-		}
-		//set knn label for XT
-		for (int i = X.size(); i < train_data.size(); i++) {
-			total_data[i].knn_label = knn_results[rc][i - X.size()];
-		}
 		//for each pair, calculate new dis
 		for (int i = 0; i < total_data.size(); i++) {
 			for (int j = i + 1; j < total_data.size(); j++) {

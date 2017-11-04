@@ -1,10 +1,10 @@
-#ifndef KNNBAYSETRANSD
-#define KNNBAYSETRANSD
+#ifndef KNNBAYSETRANSD_H
+#define KNNBAYSETRANSD_H
 
 #include "TransD.h"
 
 
-class KnnBayesTransD : TransD
+class KnnBayesTransD : public TransD
 {
 private:
 	int k;
