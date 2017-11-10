@@ -35,6 +35,9 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 	vector<pair<int, double>> labeled_ratio;
 	for(int i = 0;i < vsize;i++)
 	{
+		//skip unlabel data
+		if (X[i].label == -2)continue;
+
 		int f = -1;
 		for (int j = 0; j < labeled_ratio.size(); j++)
 		{
@@ -68,11 +71,13 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 	{
 		double divide = 0;
 		vector<pair<int, double>> tmp;
-		for (int j = 0; j < i; j++)
+		for (int j = 1; j <= i; j++)
 		{
 			divide += 1 / dis_pair[j].second;
 		}
-		for (int j = 0; j < i; j++)
+
+		//exclude itself
+		for (int j = 1; j <= i; j++)
 		{
 			double weight = (1 / dis_pair[j].second) / divide;
 			for (int q = 0; q < dis_pair[j].first.size(); q++)
@@ -108,14 +113,21 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 		}
 		for (int j = 0; j < table[i].size(); j++)
 		{
-			table[i][j].second /= normal;
+			if(normal != 0)table[i][j].second /= normal;
 		}
 	}
 
-	//get P(D|hi)
+	//get P(D|hi)*P(hi)
 	vector<double> para;
 	for (int i = 0; i < table.size(); i++)
 	{
+		//P(hi) = 1 / disum
+		double disum = 0;
+		for (int j = 1; j <= i+1; j++)
+		{
+			disum += dis_pair[j].second;
+		}
+		
 		sort(table[i].begin(), table[i].end(), compfunc3);
 		int id = -1;
 		for (int j = 0; j < labeled_ratio.size(); j++)
@@ -127,7 +139,7 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 		}
 		if (id != -1)
 		{
-			para.push_back(labeled_ratio[id].second);
+			para.push_back(labeled_ratio[id].second / disum);
 		}
 		else
 		{
@@ -159,7 +171,19 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 			}
 		}
 	}
-
+	//normalize res
+	double normal = 0;
+	for (int i = 0; i < res.size(); i++)
+	{
+		normal += res[i].second;
+	}
+	if (normal != 0) {
+		for (int i = 0; i < res.size(); i++)
+		{
+			res[i].second /= normal;
+		}
+	}
+	
 	//find max confidence value
 	int max_idx;
 	double max = -1;
