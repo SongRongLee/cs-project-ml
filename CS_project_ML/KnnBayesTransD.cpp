@@ -10,7 +10,7 @@ KnnBayesTransD::KnnBayesTransD(vector<MyData> &X, vector<MyData> &T, int k) {
 	total_data.insert(total_data.end(), T.begin(), T.end());
 	genDismatrix(total_data, dis_matrix);
 	//set initial knn_label and class_weight
-	for (int i = 0; i < X.size(); i++) {
+	for (int i = 0; i < X.size(); i++) {		
 		total_data[i].knn_label = total_data[i].label;
 		total_data[i].class_w = 1;
 		total_data[i].class_w_table.push_back(pair<int, double>(total_data[i].label, 1));
@@ -43,7 +43,7 @@ void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, v
 			vector<double> dis_vector(dis_matrix[i].begin(), dis_matrix[i].begin() + X.size());
 			total_data[i].knn_label = knn.bayesprediction(total_data[i], dis_vector);
 			tmpknn_result.push_back(total_data[i].class_w_table);
-			cout << "No." << total_data[i].num << " classify as " << total_data[i].knn_label << endl;
+			//cout << "No." << total_data[i].num << " classify as " << total_data[i].knn_label << endl;
 		}
 
 		//record knn results

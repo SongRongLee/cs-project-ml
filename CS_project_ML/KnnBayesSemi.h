@@ -16,12 +16,14 @@ private:
 	vector<MyData> T;
 	vector<MyData> total_data;
 
-	void preTrain();
+	void preTrain();	
 	void fillDismatrix();
 
 public:
 	KnnBayesSemi(vector<MyData> &X, vector<MyData> &XT, int k);
 	void performTrans();
+	void setT(vector<MyData> &T);
+	void getSortedMatrix(vector<vector<double>> &new_dis);
 };
 
 #endif

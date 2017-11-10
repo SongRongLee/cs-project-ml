@@ -11,8 +11,15 @@ KnnBayesSemi::KnnBayesSemi(vector<MyData> &X, vector<MyData> &XT, int k) {
 
 	//set initial knn_label and class_weight
 	for (int i = 0; i < total_data.size(); i++) {
+		if (i < this->X.size()) {
+			this->X[i].knn_label = this->X[i].label;
+			this->X[i].class_w = 1;
+			this->X[i].class_w_table.push_back(pair<int, double>(this->X[i].label, 1));
+		}
+
 		total_data[i].knn_label = total_data[i].label;
 		total_data[i].class_w = 1;
+		total_data[i].class_w_table.push_back(pair<int, double>(total_data[i].label, 1));
 	}
 
 	preTrain();
@@ -26,6 +33,15 @@ void KnnBayesSemi::preTrain() {
 		total_data[i].is_train = true;
 	}
 	cout << "Pre-train done." << endl;
+}
+
+void KnnBayesSemi::setT(vector<MyData> &T) {
+	//reset previous data
+	total_data.erase(total_data.begin() + X.size() + XT.size(), total_data.end());
+	//set new data
+	this->T = T;
+	total_data.insert(total_data.end(), T.begin(), T.end());
+	fillDismatrix();
 }
 
 void KnnBayesSemi::fillDismatrix() {
@@ -43,26 +59,26 @@ void KnnBayesSemi::fillDismatrix() {
 
 void KnnBayesSemi::performTrans() {
 	double v = 0.1;
-	vector<MyData> train_data(total_data.begin(), total_data.begin() + X.size() + XT.size());
-	KNNClassifier knn(train_data, k);
+	
 	KNNClassifier first_knn(X, k);
 
 	for (int rc = 0; rc < dis_matrixs.size() - 1; rc++) {
 		double lambda = 1, epsilon;
 		double r = 0.5;
 		double w = 1.05;
+		int train_data_size = X.size() + XT.size();
 		cout << "Round " << rc + 1 << " ." << endl;
 
 		if (rc == 0) {
 			//get knn class weight and label for testing data
-			for (int i = train_data.size(); i < total_data.size(); i++) {
+			for (int i = train_data_size; i < total_data.size(); i++) {
 				vector<double> dis_vector(dis_matrixs[rc][i].begin(), dis_matrixs[rc][i].begin() + X.size());
 				total_data[i].knn_label = first_knn.bayesprediction(total_data[i], dis_vector);
 			}
 		}
 		else {
 			//set knn label for XT
-			for (int i = X.size(); i < train_data.size(); i++) {
+			for (int i = X.size(); i < train_data_size; i++) {
 				total_data[i].class_w_table = knn_results[rc][i - X.size()];
 				int max_label;
 				double max = -1;
@@ -75,6 +91,8 @@ void KnnBayesSemi::performTrans() {
 				}
 				total_data[i].knn_label = max_label;
 			}
+			vector<MyData> train_data(total_data.begin(), total_data.begin() + X.size() + XT.size());
+			KNNClassifier knn(train_data, k);
 			//get knn class weight and label for testing data
 			for (int i = train_data.size(); i < total_data.size(); i++) {
 				vector<double> dis_vector(dis_matrixs[rc][i].begin(), dis_matrixs[rc][i].begin() + train_data.size());
@@ -85,7 +103,7 @@ void KnnBayesSemi::performTrans() {
 		//for each pair, calculate new dis
 		for (int i = 0; i < total_data.size(); i++) {
 			for (int j = i + 1; j < total_data.size(); j++) {
-				if (i < train_data.size() && j < train_data.size()) {
+				if (i < train_data_size && j < train_data_size) {
 					continue;
 				}
 				double f = 1;
@@ -103,4 +121,8 @@ void KnnBayesSemi::performTrans() {
 		}
 	}
 	printDismatrix(dis_matrixs[2]);
+}
+
+void KnnBayesSemi::getSortedMatrix(vector<vector<double>> &new_dis) {
+	indexSortedMatrix(total_data, dis_matrixs[dis_matrixs.size() - 1], new_dis);
 }
