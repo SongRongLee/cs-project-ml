@@ -74,13 +74,18 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 	{
 		double divide = 0;
 		vector<pair<int, double>> tmp;
-		for (int j = 1; j <= i; j++)
+		int lower = 1, upper = i;
+		if (dis_pair[0].second != 0) {
+			lower = 0;
+			upper = i - 1;
+		}
+		for (int j = lower; j <= upper; j++)
 		{
 			divide += 1 / dis_pair[j].second;
 		}
 
 		//exclude itself
-		for (int j = 1; j <= i; j++)
+		for (int j = lower; j <= upper; j++)
 		{
 			double weight = (1 / dis_pair[j].second) / divide;
 			for (int q = 0; q < dis_pair[j].first.size(); q++)
@@ -126,7 +131,12 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 	{
 		//P(hi) = 1 / disum
 		double disum = 0;
-		for (int j = 1; j <= i+1; j++)
+		int lower = 1, upper = i+1;
+		if (dis_pair[0].second != 0) {
+			lower = 0;
+			upper = i;
+		}
+		for (int j = lower; j <= upper; j++)
 		{
 			disum += dis_pair[j].second;
 		}

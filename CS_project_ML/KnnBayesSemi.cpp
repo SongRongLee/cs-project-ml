@@ -54,42 +54,41 @@ void KnnBayesSemi::fillDismatrix() {
 	}
 	//initialize starting matrix
 	genDismatrix(total_data, dis_matrixs[0]);
-	printDismatrix(dis_matrixs[2]);
 }
 
 void KnnBayesSemi::performTrans() {
-	double v = 0.1;
-	
+	int train_data_size = X.size() + XT.size();
+
 	KNNClassifier first_knn(X, k);
 
 	for (int rc = 0; rc < dis_matrixs.size() - 1; rc++) {
 		double lambda = 1, epsilon;
 		double r = 0.5;
-		double w = 1.05;
-		int train_data_size = X.size() + XT.size();
+		
 		cout << "Round " << rc + 1 << " ." << endl;
 
-		if (rc == 0) {
-			//get knn class weight and label for testing data
-			for (int i = train_data_size; i < total_data.size(); i++) {
-				vector<double> dis_vector(dis_matrixs[rc][i].begin(), dis_matrixs[rc][i].begin() + X.size());
-				total_data[i].knn_label = first_knn.bayesprediction(total_data[i], dis_vector);
-			}
-		}
-		else {
+		//if (rc == 0) {
+		//	//get knn class weight and label for testing data
+		//	for (int i = train_data_size; i < total_data.size(); i++) {
+		//		vector<double> dis_vector(dis_matrixs[rc][i].begin(), dis_matrixs[rc][i].begin() + X.size());
+		//		total_data[i].knn_label = first_knn.bayesprediction(total_data[i], dis_vector);
+		//	}
+		//}
+		//else {
 			//set knn label for XT
 			for (int i = X.size(); i < train_data_size; i++) {
 				total_data[i].class_w_table = knn_results[rc][i - X.size()];
 				int max_label;
 				double max = -1;
 				//find knn label
-				for (int j = 0; j < total_data[j].class_w_table.size(); j++){
+				for (int j = 0; j < total_data[i].class_w_table.size(); j++){
 					if (total_data[i].class_w_table[j].second > max){
 						max = total_data[i].class_w_table[j].second;
 						max_label = total_data[i].class_w_table[j].first;
 					}
-				}
+				}				
 				total_data[i].knn_label = max_label;
+				total_data[i].class_w = max;
 			}
 			vector<MyData> train_data(total_data.begin(), total_data.begin() + X.size() + XT.size());
 			KNNClassifier knn(train_data, k);
@@ -98,7 +97,7 @@ void KnnBayesSemi::performTrans() {
 				vector<double> dis_vector(dis_matrixs[rc][i].begin(), dis_matrixs[rc][i].begin() + train_data.size());
 				total_data[i].knn_label = knn.bayesprediction(total_data[i], dis_vector);
 			}
-		}
+		//}
 		
 		//for each pair, calculate new dis
 		for (int i = 0; i < total_data.size(); i++) {
@@ -110,7 +109,7 @@ void KnnBayesSemi::performTrans() {
 				epsilon = lambda * total_data[i].class_w * total_data[j].class_w;
 				if (r <= epsilon) {
 					//change dis					
-					f = 2 / (1 + exp(-w*v));
+					f = 1.05;
 					if (total_data[i].knn_label == total_data[j].knn_label) {
 						f = 1 / f;
 					}
@@ -119,8 +118,24 @@ void KnnBayesSemi::performTrans() {
 				dis_matrixs[rc + 1][j][i] = dis_matrixs[rc][i][j] * f;
 			}
 		}
+		//print 13 label
+		cout << total_data[train_data_size].class_w_table[0].first << "," << total_data[train_data_size].class_w_table[0].second << " ";
+		cout << total_data[train_data_size].class_w_table[1].first << "," << total_data[train_data_size].class_w_table[1].second << endl;
+		//print dismatrix		
+		string title = "testing_dis" + to_string(rc + 1) + ".txt";
+		ofstream out(title);
+		vector<vector<double>> new_dis;
+		indexSortedMatrix(total_data, dis_matrixs[rc], new_dis);
+		printDismatrix(new_dis, out);
+		out.close();
 	}
-	printDismatrix(dis_matrixs[2]);
+	//print dismatrix		
+	string title = "testing_dis" + to_string(dis_matrixs.size()) + ".txt";
+	ofstream out(title);
+	vector<vector<double>> new_dis;
+	indexSortedMatrix(total_data, dis_matrixs[dis_matrixs.size() - 1], new_dis);
+	printDismatrix(new_dis, out);
+	out.close();
 }
 
 void KnnBayesSemi::getSortedMatrix(vector<vector<double>> &new_dis) {

@@ -154,7 +154,7 @@ void printDismatrix(vector<vector<double>> &dis_matrix) {
 	ofstream out("out.txt");
 	for (int i = 0; i < dis_matrix.size(); i++) {
 		for (int j = 0; j < dis_matrix[i].size(); j++) {
-			out <<left<<fixed<<setprecision(6)<<setw(9)<< dis_matrix[i][j];
+			out << left << fixed << setprecision(18) << setw(21) << dis_matrix[i][j];
 		}
 		out << endl;
 	}
@@ -162,7 +162,7 @@ void printDismatrix(vector<vector<double>> &dis_matrix) {
 void printDismatrix(vector<vector<double>> &dis_matrix, ofstream &out) {
 	for (int i = 0; i < dis_matrix.size(); i++) {
 		for (int j = 0; j < dis_matrix[i].size(); j++) {
-			out << fixed << setprecision(9) << setw(12) << dis_matrix[i][j];
+			out << fixed << setprecision(18) << setw(21) << dis_matrix[i][j];
 		}
 		out << endl;
 	}
