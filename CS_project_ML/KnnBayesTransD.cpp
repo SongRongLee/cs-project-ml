@@ -4,7 +4,7 @@ KnnBayesTransD::KnnBayesTransD(vector<MyData> &X, vector<MyData> &T, int k) {
 	this->k = k;
 	this->X = X;
 	this->T = T;
-	round_limit = 1;
+	round_limit = 20;
 	//generate distance matrix
 	total_data = X;
 	total_data.insert(total_data.end(), T.begin(), T.end());

@@ -63,6 +63,7 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 		labeled_ratio[i].second /= label_count;
 	}
 
+
 	vector<vector<pair<int, double>>> table;
 
 	//sort dis_pair using distance
@@ -200,17 +201,7 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 	t.class_w_table = res;
 	t.class_w = max;
 	t.knn_label = res[max_idx].first;
-	//debuging
-	if (t.num == 46) {
-		ofstream out("weight.txt");
-		for (int i = 0; i < table.size(); i++) {
-			for (int j = 0; j < table[i].size(); j++) {
-				out << fixed << setprecision(6) << table[i][j].second * para[i]<< " ";
-			}
-			out << endl;
-		}		
-		out.close();
-	}
+
 	return res[max_idx].first;
 }
 int KNNClassifier::prediction(MyData &t) {

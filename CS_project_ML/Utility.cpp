@@ -78,10 +78,12 @@ void extractData(vector<MyData> &X, vector<MyData> &XT, vector<MyData> &T, strin
 		in >> temp_data.label;
 		if (fold_data == -1) {
 			temp_data.is_train = false;
+			temp_data.label = -1;
 			T.push_back(temp_data);
 		}
 		else if(fold_data == -2){
 			temp_data.is_train = false;
+			temp_data.label = -2;
 			XT.push_back(temp_data);
 		}
 		else {
