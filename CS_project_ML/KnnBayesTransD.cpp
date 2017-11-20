@@ -4,7 +4,7 @@ KnnBayesTransD::KnnBayesTransD(vector<MyData> &X, vector<MyData> &T, int k) {
 	this->k = k;
 	this->X = X;
 	this->T = T;
-	round_limit = 20;
+	round_limit = 1;
 	//generate distance matrix
 	total_data = X;
 	total_data.insert(total_data.end(), T.begin(), T.end());
@@ -94,9 +94,23 @@ void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, v
 			}
 		}
 
+		//output class weight
+		string title = "training_label" + to_string(rc + 1) + ".txt";
+		ofstream out(title);
+		for (int i = 0; i < total_data.size(); i++) {
+			sort(total_data[i].class_w_table.begin(), total_data[i].class_w_table.end(), mycomp2);
+			for (int j = 0; j < total_data[i].class_w_table.size(); j++) {
+				out << fixed << setprecision(6) << total_data[i].class_w_table[j].first << "," << total_data[i].class_w_table[j].second << "\t";
+			}
+			out << endl;
+		}
+		out.close();
+
 		if (check_flag) {
 			cout << "KnnBayesTransD done by 1-NN and 1mi match." << endl;
 			break;
 		}
+
+		
 	}
 }

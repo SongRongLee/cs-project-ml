@@ -4,6 +4,10 @@ bool mycomp(pair<int, double> a, pair<int, double> b) {
 	return a.second < b.second;
 }
 
+bool mycomp2(pair<int, double> a, pair<int, double> b) {
+	return a.first < b.first;
+}
+
 string getPrefix(string dirname) {
 	int found;
 	found = dirname.find_last_of("\\");

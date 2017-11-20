@@ -33,11 +33,13 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 
 	//calculate train data label ratio
 	vector<pair<int, double>> labeled_ratio;
+	int label_count = 0;
 	for(int i = 0;i < vsize;i++)
 	{
 		//skip unlabel data
 		if (X[i].label == -2)continue;
 
+		label_count++;
 		int f = -1;
 		for (int j = 0; j < labeled_ratio.size(); j++)
 		{
@@ -58,7 +60,7 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 	}
 	for (int i = 0; i < labeled_ratio.size(); i++)
 	{
-		labeled_ratio[i].second /= vsize;
+		labeled_ratio[i].second /= label_count;
 	}
 
 	vector<vector<pair<int, double>>> table;
@@ -198,7 +200,17 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 	t.class_w_table = res;
 	t.class_w = max;
 	t.knn_label = res[max_idx].first;
-
+	//debuging
+	if (t.num == 46) {
+		ofstream out("weight.txt");
+		for (int i = 0; i < table.size(); i++) {
+			for (int j = 0; j < table[i].size(); j++) {
+				out << fixed << setprecision(6) << table[i][j].second * para[i]<< " ";
+			}
+			out << endl;
+		}		
+		out.close();
+	}
 	return res[max_idx].first;
 }
 int KNNClassifier::prediction(MyData &t) {
