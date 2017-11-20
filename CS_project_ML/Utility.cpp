@@ -159,7 +159,14 @@ void printDismatrix(vector<vector<double>> &dis_matrix) {
 		out << endl;
 	}
 }
-
+void printDismatrix(vector<vector<double>> &dis_matrix, ofstream &out) {
+	for (int i = 0; i < dis_matrix.size(); i++) {
+		for (int j = 0; j < dis_matrix[i].size(); j++) {
+			out << fixed << setprecision(9) << setw(12) << dis_matrix[i][j];
+		}
+		out << endl;
+	}
+}
 void indexSortedMatrix(vector<MyData> &total_data, vector<vector<double>> &dis_matrix, vector<vector<double>> &new_dis) {
 	new_dis = dis_matrix;
 	for (int j = 0; j < dis_matrix.size(); j++) {

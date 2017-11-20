@@ -24,5 +24,5 @@ double euDistance(MyData a, MyData b);
 void genDismatrix(vector<MyData> &X, vector<vector<double>> &dis_matrix, int dis_type = EU_DIS);
 void indexSortedMatrix(vector<MyData> &total_data, vector<vector<double>> &dis_matrix, vector<vector<double>> &new_dis);
 void printDismatrix(vector<vector<double>> &dis_matrix);
-
+void printDismatrix(vector<vector<double>> &dis_matrix, ofstream &out);
 #endif

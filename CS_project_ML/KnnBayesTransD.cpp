@@ -11,12 +11,7 @@ KnnBayesTransD::KnnBayesTransD(vector<MyData> &X, vector<MyData> &T, int k) {
 	genDismatrix(total_data, dis_matrix);
 	//set initial knn_label and class_weight
 	for (int i = 0; i < total_data.size(); i++) {
-		if (i < X.size()) {
-			total_data[i].knn_label = total_data[i].label;
-			total_data[i].class_w = 1;
-			total_data[i].class_w_table.push_back(pair<int, double>(total_data[i].label, 1));
-		}
-		else {
+		if (i >= X.size()) {
 			total_data[i].knn_label = total_data[i].label;
 			total_data[i].class_w = 1;
 			total_data[i].class_w_table.push_back(pair<int, double>(0, 0));
@@ -62,8 +57,8 @@ void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, v
 				double f = 1;
 				epsilon = lambda * total_data[i].class_w * total_data[j].class_w;
 				if (r <= epsilon) {
-					//change dis					
-					f = 2 / (1 + exp(-w*v));
+					//change dis
+					f = 1.05;
 					if (total_data[i].knn_label == total_data[j].knn_label) {
 						f = 1 / f;
 					}
@@ -104,13 +99,11 @@ void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, v
 			}
 			out << endl;
 		}
-		out.close();
+		out.close();	
 
 		if (check_flag) {
 			cout << "KnnBayesTransD done by 1-NN and 1mi match." << endl;
 			break;
-		}
-
-		
+		}		
 	}
 }

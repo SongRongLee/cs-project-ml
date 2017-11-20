@@ -202,6 +202,19 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 	t.class_w = max;
 	t.knn_label = res[max_idx].first;
 
+	//debuging
+	/*if (t.num == 1) {
+		ofstream out("weight.txt");
+		for (int i = 0; i < table.size(); i++) {
+			sort(table[i].begin(), table[i].end(), mycomp2);
+			for (int j = 0; j < table[i].size(); j++) {
+				out << fixed << setprecision(6) << table[i][j].second << " ";				
+			}
+			out << endl;
+		}
+		out.close();		
+	}*/
+
 	return res[max_idx].first;
 }
 int KNNClassifier::prediction(MyData &t) {
