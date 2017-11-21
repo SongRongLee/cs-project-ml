@@ -8,6 +8,11 @@ bool mycomp2(pair<int, double> a, pair<int, double> b) {
 	return a.first < b.first;
 }
 
+bool mycompindex(MyData a, MyData b) {
+	return a.num < b.num;
+}
+
+
 string getPrefix(string dirname) {
 	int found;
 	found = dirname.find_last_of("\\");

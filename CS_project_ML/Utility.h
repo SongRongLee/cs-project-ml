@@ -18,6 +18,7 @@ void extractData(vector<MyData> &X, vector<MyData> &XT, vector<MyData> &T, strin
 
 bool mycomp(pair<int, double> a, pair<int, double> b);
 bool mycomp2(pair<int, double> a, pair<int, double> b);
+bool mycompindex(MyData a, MyData b);
 int checkResult(vector<int> &result, vector<MyData> &T);
 double calDistance(MyData a, MyData b, int dis_type);
 double euDistance(MyData a, MyData b);
