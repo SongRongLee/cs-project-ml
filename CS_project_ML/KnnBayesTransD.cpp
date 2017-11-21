@@ -92,14 +92,26 @@ void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, v
 		//output class weight
 		string title = "training_label" + to_string(rc + 1) + ".txt";
 		ofstream out(title);
-		for (int i = 0; i < total_data.size(); i++) {
-			sort(total_data[i].class_w_table.begin(), total_data[i].class_w_table.end(), mycomp2);
-			for (int j = 0; j < total_data[i].class_w_table.size(); j++) {
-				out << fixed << setprecision(6) << total_data[i].class_w_table[j].first << "," << total_data[i].class_w_table[j].second << "\t";
+		double *beauty_weight = new double[total_data.back().class_w_table.size()];
+		for (int j = 0; j < total_data.back().class_w_table.size(); j++)
+		{
+			beauty_weight[j] = 0;
+		}
+		vector<MyData>sorted_data = sorted_data;
+			sort(sorted_data.begin(), sorted_data.end(), mycompindex);
+		for (int i = 0; i < sorted_data.size(); i++) {
+			sort(sorted_data[i].class_w_table.begin(), sorted_data[i].class_w_table.end(), mycomp2);
+			for (int j = 0; j < sorted_data[i].class_w_table.size(); j++)
+			{
+				beauty_weight[sorted_data[i].class_w_table[j].first] = sorted_data[i].class_w_table[j].second;
+			}
+			for (int j = 0; j <sorted_data.back().class_w_table.size(); j++) {
+				out << fixed << setprecision(6) << j << "," << beauty_weight[j] << "\t";
+				beauty_weight[j] = 0;
 			}
 			out << endl;
 		}
-		out.close();	
+		out.close();
 
 		if (check_flag) {
 			cout << "KnnBayesTransD done by 1-NN and 1mi match." << endl;
