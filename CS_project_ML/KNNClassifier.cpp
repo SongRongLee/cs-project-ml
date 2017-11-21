@@ -37,7 +37,7 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 	for(int i = 0;i < vsize;i++)
 	{
 		//skip unlabel data
-		if (X[i].label == -2)continue;
+		if (X[i].label == -2 || X[i].label == -1)continue;
 
 		label_count++;
 		int f = -1;
