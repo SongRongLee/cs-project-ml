@@ -120,21 +120,35 @@ void KnnBayesSemi::performTrans() {
 			}
 		}
 
-		//print dismatrix		
+		/*//print dismatrix		
 		string title = "testing_dis" + to_string(rc + 1) + ".txt";
 		ofstream out(title);
 		vector<vector<double>> new_dis;
 		indexSortedMatrix(total_data, dis_matrixs[rc], new_dis);
 		printDismatrix(new_dis, out);
-		out.close();
+		out.close();*/
 	}
+	/*
 	//print dismatrix		
 	string title = "testing_dis" + to_string(dis_matrixs.size()) + ".txt";
 	ofstream out(title);
 	vector<vector<double>> new_dis;
 	indexSortedMatrix(total_data, dis_matrixs[dis_matrixs.size() - 1], new_dis);
 	printDismatrix(new_dis, out);
-	out.close();
+	out.close();*/
+
+	//print dismatrix		
+	for (int i = 0; i < T.size(); i++)
+	{
+		string title = "testing_dis" + to_string(T[i].num )+ ".txt";
+		ofstream out(title);
+		vector<vector<vector<double>>> new_diss;
+		indexSortedAllMatrix(total_data, dis_matrixs, new_diss);
+		printTestDis(new_diss, T[i].num,total_data,out);
+		out.close();
+	}
+
+
 }
 
 void KnnBayesSemi::getSortedMatrix(vector<vector<double>> &new_dis) {

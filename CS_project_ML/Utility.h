@@ -18,11 +18,15 @@ void extractData(vector<MyData> &X, vector<MyData> &XT, vector<MyData> &T, strin
 
 bool mycomp(pair<int, double> a, pair<int, double> b);
 bool mycomp2(pair<int, double> a, pair<int, double> b);
+bool mycompindex(MyData a, MyData b);
 int checkResult(vector<int> &result, vector<MyData> &T);
 double calDistance(MyData a, MyData b, int dis_type);
 double euDistance(MyData a, MyData b);
 void genDismatrix(vector<MyData> &X, vector<vector<double>> &dis_matrix, int dis_type = EU_DIS);
 void indexSortedMatrix(vector<MyData> &total_data, vector<vector<double>> &dis_matrix, vector<vector<double>> &new_dis);
+void indexSortedAllMatrix(vector<MyData> &total_data, vector<vector<vector<double>>> &dis_matrixs, vector<vector<vector<double>>>&new_diss);
 void printDismatrix(vector<vector<double>> &dis_matrix);
 void printDismatrix(vector<vector<double>> &dis_matrix, ofstream &out);
+void printTestDis(vector<vector<vector<double>>> dis_matrixs,int num, const vector<MyData> &total_data);
+void printTestDis(vector<vector<vector<double>>> dis_matrixs, int num, const vector<MyData> &total_data, ofstream &out);
 #endif
