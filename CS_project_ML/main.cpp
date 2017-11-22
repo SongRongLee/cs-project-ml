@@ -7,9 +7,9 @@ int main() {
 
 	//---user define params---
 	ofstream out("out.txt");
-	string dirname = "C:\\Users\\steven954211\\Source\\Repos\\testData2\\d1_s.data";
+	string dirname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\d1_s.data";
 	//string dirname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\d1-7_s\\d1_s";
-	string labelname = "C:\\Users\\steven954211\\Source\\Repos\\testData2\\d1_s\\label01.txt";
+	string labelname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\d1_s\\label01.txt";
 	int k = 1;
 	int fold_num = 1;
 	//------------------------
