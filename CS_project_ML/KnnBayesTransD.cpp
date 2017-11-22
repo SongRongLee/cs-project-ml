@@ -97,7 +97,7 @@ void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, v
 		{
 			beauty_weight[j] = 0;
 		}
-		vector<MyData>sorted_data = sorted_data;
+		vector<MyData>sorted_data = total_data;
 			sort(sorted_data.begin(), sorted_data.end(), mycompindex);
 		for (int i = 0; i < sorted_data.size(); i++) {
 			sort(sorted_data[i].class_w_table.begin(), sorted_data[i].class_w_table.end(), mycomp2);
