@@ -1,5 +1,4 @@
 #include"KnnBayesSemi.h"
-
 KnnBayesSemi::KnnBayesSemi(vector<MyData> &X, vector<MyData> &XT, int k) {
 	this->X = X;
 	this->XT = XT;
@@ -36,6 +35,17 @@ void KnnBayesSemi::preTrain() {
 	for (int i = X.size(); i < X.size() + XT.size(); i++) {
 		total_data[i].is_train = true;
 	}
+
+	Eigen::MatrixXd first_matrix(total_data.size(), total_data.size());
+	for (int i = 0; i < total_data.size(); i++)
+		first_matrix.row(i) = Eigen::VectorXd::Map(&dis_matrixs[0][i][0], dis_matrixs[0][i].size());
+	Eigen::MatrixXd last_matrix(total_data.size(), total_data.size());
+	for (int i = 0; i < total_data.size(); i++)
+		last_matrix.row(i) = Eigen::VectorXd::Map(&dis_matrixs[dis_matrixs.size()-1][i][0], dis_matrixs[dis_matrixs.size() - 1][i].size());
+	//Eigen::MatrixXd first_matrix_inverse = first_matrix.completeOrthogonalDecomposition().pseudoInverse();
+	Eigen::MatrixXd first_matrix_inverse = first_matrix.inverse();
+	god_matrix = first_matrix_inverse*last_matrix;
+	//cout << god_matrix;
 	cout << "Pre-train done." << endl;
 }
 
@@ -67,8 +77,7 @@ void KnnBayesSemi::fillDismatrix() {
 
 void KnnBayesSemi::performTrans() {
 	int train_data_size = X.size() + XT.size();
-
-	for (int rc = 0; rc < dis_matrixs.size() - 1; rc++) {
+	/*for (int rc = 0; rc < dis_matrixs.size() - 1; rc++) {
 		double lambda = 1, epsilon;
 		double r = 0.5;
 		
@@ -119,15 +128,9 @@ void KnnBayesSemi::performTrans() {
 				dis_matrixs[rc + 1][j][i] = dis_matrixs[rc][i][j] * f;
 			}
 		}
+		
 
-		/*//print dismatrix		
-		string title = "testing_dis" + to_string(rc + 1) + ".txt";
-		ofstream out(title);
-		vector<vector<double>> new_dis;
-		indexSortedMatrix(total_data, dis_matrixs[rc], new_dis);
-		printDismatrix(new_dis, out);
-		out.close();*/
-	}
+	}*/
 	/*
 	//print dismatrix		
 	string title = "testing_dis" + to_string(dis_matrixs.size()) + ".txt";
@@ -136,9 +139,19 @@ void KnnBayesSemi::performTrans() {
 	indexSortedMatrix(total_data, dis_matrixs[dis_matrixs.size() - 1], new_dis);
 	printDismatrix(new_dis, out);
 	out.close();*/
-
-	//print dismatrix		
-	for (int i = 0; i < T.size(); i++)
+	
+	
+	for (int i = train_data_size; i < total_data.size(); i++)
+	{
+		Eigen::VectorXd test= Eigen::VectorXd::Map(&dis_matrixs[0][i][0], train_data_size);
+		Eigen::VectorXd final_dis = god_matrix*test;
+		
+		string title = "testing_dis_inverse" + to_string(T[i- train_data_size].num) + ".txt";
+		ofstream out(title);
+		out << final_dis;
+		out.close();
+	}
+	/*for (int i = 0; i < T.size(); i++)
 	{
 		string title = "testing_dis" + to_string(T[i].num )+ ".txt";
 		ofstream out(title);
@@ -147,7 +160,7 @@ void KnnBayesSemi::performTrans() {
 		printTestDis(new_diss, T[i].num,total_data,out);
 		out.close();
 	}
-
+	*/
 
 }
 

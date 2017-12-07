@@ -7,7 +7,7 @@
 #include<vector>
 #include<string>
 #include"MyData.h"
-
+#include <Eigen/Dense>
 #define EU_DIS 0
 
 using namespace std;
