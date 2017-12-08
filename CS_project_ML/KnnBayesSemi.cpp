@@ -144,23 +144,23 @@ void KnnBayesSemi::performTrans() {
 	for (int i = train_data_size; i < total_data.size(); i++)
 	{
 		Eigen::VectorXd test= Eigen::VectorXd::Map(&dis_matrixs[0][i][0], train_data_size);
-		Eigen::VectorXd final_dis = god_matrix*test;
+		Eigen::VectorXd final_dis = test.transpose()*god_matrix;
 		
 		string title = "testing_dis_inverse" + to_string(T[i- train_data_size].num) + ".txt";
 		ofstream out(title);
 		out << final_dis;
 		out.close();
 	}
-	/*for (int i = 0; i < T.size(); i++)
+	for (int i = 0; i < T.size(); i++)
 	{
 		string title = "testing_dis" + to_string(T[i].num )+ ".txt";
 		ofstream out(title);
 		vector<vector<vector<double>>> new_diss;
-		indexSortedAllMatrix(total_data, dis_matrixs, new_diss);
-		printTestDis(new_diss, T[i].num,total_data,out);
+		//indexSortedAllMatrix(total_data, dis_matrixs, new_diss);
+		printTestDis(dis_matrixs, T[i].num,total_data,out);
 		out.close();
 	}
-	*/
+	
 
 }
 
