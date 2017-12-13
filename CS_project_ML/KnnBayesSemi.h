@@ -15,7 +15,7 @@ private:
 	vector<MyData> XT;
 	vector<MyData> T;
 	vector<MyData> total_data;
-
+	Eigen::MatrixXd god_matrix;
 	void preTrain();	
 	void fillDismatrix();
 
