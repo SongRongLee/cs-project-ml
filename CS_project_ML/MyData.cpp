@@ -3,8 +3,9 @@
 MyData::MyData() {
 }
 
-MyData::MyData(int num, vector<double> features, int label, bool is_train) {
+MyData::MyData(int num, vector<double> features, int label, int real_label, bool is_train) {
 	this->num = num;
+	this->real_label = real_label;
 	this->features = features;
 	this->label = label;
 	this->is_train = is_train;

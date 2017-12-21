@@ -24,6 +24,7 @@ public:
 	void performTrans();
 	void setT(vector<MyData> &T);
 	void getSortedMatrix(vector<vector<double>> &new_dis);
+	double getScore();
 };
 
 #endif

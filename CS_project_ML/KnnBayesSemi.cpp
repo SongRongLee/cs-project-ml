@@ -143,27 +143,48 @@ void KnnBayesSemi::performTrans() {
 	
 	for (int i = train_data_size; i < total_data.size(); i++)
 	{
-		Eigen::VectorXd test= Eigen::VectorXd::Map(&dis_matrixs[0][i][0], train_data_size);
+		Eigen::VectorXd test = Eigen::VectorXd::Map(&dis_matrixs[0][i][0], train_data_size);
 		Eigen::VectorXd final_dis = test.transpose()*god_matrix;
-		
+		//set new dis
+		for (int j = 0; j < train_data_size; j++)
+		{
+			dis_matrixs[dis_matrixs.size() - 1][i][j] = final_dis(j, 0);
+		}
+		//output new dis
 		string title = "testing_dis_inverse" + to_string(T[i- train_data_size].num) + ".txt";
 		ofstream out(title);
 		out << final_dis;
 		out.close();
 	}
-	for (int i = 0; i < T.size(); i++)
+	//maybe wrong
+	/*for (int i = 0; i < T.size(); i++)
 	{
 		string title = "testing_dis" + to_string(T[i].num )+ ".txt";
 		ofstream out(title);
 		vector<vector<vector<double>>> new_diss;
 		//indexSortedAllMatrix(total_data, dis_matrixs, new_diss);
-		printTestDis(dis_matrixs, T[i].num,total_data,out);
+		printTestDis(dis_matrixs, T[i].num, total_data, out);
 		out.close();
-	}
+	}*/
 	
 
 }
-
 void KnnBayesSemi::getSortedMatrix(vector<vector<double>> &new_dis) {
 	indexSortedMatrix(total_data, dis_matrixs[dis_matrixs.size() - 1], new_dis);
+}
+double KnnBayesSemi::getScore() {
+	vector<int> results;
+	int train_data_size = X.size() + XT.size();
+	vector<MyData> train_data(total_data.begin(), total_data.begin() + train_data_size);
+	//set real_label to label
+	for (int j = 0; j < train_data.size(); j++) {
+		train_data[j].label = train_data[j].real_label;
+	}
+	KNNClassifier one_nn(train_data, 1);
+	for (int i = train_data_size; i < total_data.size(); i++) {		
+		vector<double> dis_vector(dis_matrixs[dis_matrixs.size() - 1][i].begin(), dis_matrixs[dis_matrixs.size() - 1][i].begin() + train_data_size);
+		results.push_back(one_nn.prediction(total_data[i], dis_vector));
+	}
+	double wrong_count = checkResult(results, T);
+	return (double)(T.size() - wrong_count) / (double)T.size() * 100;
 }

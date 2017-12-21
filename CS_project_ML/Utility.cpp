@@ -80,10 +80,10 @@ void extractData(vector<MyData> &X, vector<MyData> &XT, vector<MyData> &T, strin
 			in >> temp >> comma;
 			temp_data.features.push_back(temp);
 		}
-		in >> temp_data.label;
+		in >> temp_data.real_label;
 		if (fold_data == -1) {
 			temp_data.is_train = false;
-			temp_data.label = -1;
+			temp_data.label = -1;			
 			T.push_back(temp_data);
 		}
 		else if(fold_data == -2){
@@ -93,6 +93,7 @@ void extractData(vector<MyData> &X, vector<MyData> &XT, vector<MyData> &T, strin
 		}
 		else {
 			temp_data.is_train = true;
+			temp_data.label = temp_data.real_label;
 			X.push_back(temp_data);
 		}
 	}
@@ -102,7 +103,7 @@ int checkResult(vector<int> &result, vector<MyData> &T) {
 	int vsize = result.size();
 	int ans = 0;
 	for (int i = 0; i < vsize; i++) {
-		if (result[i] != T[i].label) ans++;
+		if (result[i] != T[i].real_label) ans++;
 	}
 	return ans;
 }
@@ -185,7 +186,7 @@ void printTestDis(vector<vector<vector<double>>> dis_matrixs, int num, const vec
 	}
 
 }
-void printTestDis(vector<vector<vector<double>>> dis_matrixs,int num , const vector<MyData> &total_data, ofstream &out) {
+/*void printTestDis(vector<vector<vector<double>>> dis_matrixs,int num , const vector<MyData> &total_data, ofstream &out) {
 	for (int i = 0; i < dis_matrixs.size(); i++)
 	{
 		for (int j = 0; j < dis_matrixs[i].size(); j++) {
@@ -195,7 +196,7 @@ void printTestDis(vector<vector<vector<double>>> dis_matrixs,int num , const vec
 		out << endl;
 	}
 	
-}
+}*/
 void indexSortedMatrix(vector<MyData> &total_data, vector<vector<double>> &dis_matrix, vector<vector<double>> &new_dis) {
 	new_dis = dis_matrix;
 	for (int j = 0; j < dis_matrix.size(); j++) {

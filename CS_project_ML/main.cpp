@@ -35,7 +35,7 @@ int main() {
 		stransd.setT(T);
 		stransd.performTrans();
 		stransd.getSortedMatrix(new_dis);
-		printDismatrix(new_dis);
+		cout << stransd.getScore() <<"%"<< endl;;
 
 		//TransD		
 		/*TransD transd(X, T, k);
