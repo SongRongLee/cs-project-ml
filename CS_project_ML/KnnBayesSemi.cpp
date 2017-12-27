@@ -29,7 +29,7 @@ KnnBayesSemi::KnnBayesSemi(vector<MyData> &X, vector<MyData> &XT, int k) {
 }
 
 void KnnBayesSemi::preTrain() {
-	cout << "Pre-training..." << endl;
+	//cout << "Pre-training..." << endl;
 	KnnBayesTransD transd(X, XT, k);
 	transd.performTrans(dis_matrixs, knn_results);
 	for (int i = X.size(); i < X.size() + XT.size(); i++) {
@@ -50,7 +50,7 @@ void KnnBayesSemi::preTrain() {
 	f2out << god_matrix;
 	f2out.close();*/
 
-	cout << "Pre-train done." << endl;
+	//cout << "Pre-train done." << endl;
 }
 
 void KnnBayesSemi::setT(vector<MyData> &T) {

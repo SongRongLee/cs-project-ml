@@ -29,7 +29,7 @@ AffineSemi::AffineSemi(vector<MyData> &X, vector<MyData> &XT, int k) {
 }
 
 void AffineSemi::preTrain() {
-	cout << "Pre-training..." << endl;
+	//cout << "Pre-training..." << endl;
 	KnnBayesTransD transd(X, XT, k);
 	transd.performTrans(dis_matrixs, knn_results);
 	for (int i = X.size(); i < X.size() + XT.size(); i++) {

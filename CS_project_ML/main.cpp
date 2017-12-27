@@ -7,13 +7,14 @@ using namespace std;
 int main() {
 
 	//---user define params---
-	ofstream out("out.txt");
-	string dirname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\cleveland_s.data";
+	ofstream afineout("afine.txt");
+	ofstream inverseout("inverse.txt");
+	string dirname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\ecoli_s.data";
 	//string dirname = "C:\\Users\\steven954211\\Source\\Repos\\testData2\\d1_s.data";
 	string labelname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\d1_s\\label01.txt";
 	//string labelname ="C:\\Users\\steven954211\\Source\\Repos\\testData2\\d1_s\\label01.txt";
 	int k = 1;
-	int fold_num = 1;
+	int fold_num = 50;
 	//------------------------
 
 	double validation_err = 0;
@@ -28,7 +29,7 @@ int main() {
 		vector<int> result;
 		vector<vector<double>> new_dis;
 
-		labelname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\cleveland_s\\label" + to_string(i/10) + to_string(i%10) + ".txt";
+		labelname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\ecoli_s\\label" + to_string(i/10) + to_string(i%10) + ".txt";
 		extractData(X, XT, T, dirname, labelname);
 		//extractData(X, T, dirname, i);
 
@@ -36,13 +37,13 @@ int main() {
 		KnnBayesSemi stransd(X, XT, k);
 		stransd.setT(T);
 		stransd.performTrans();
-		cout << stransd.getScore() <<"%"<< endl;
+		inverseout << stransd.getScore() << endl;
 
 		//AffineSemi
-		/*AffineSemi stransd(X, XT, k);
-		stransd.setT(T);
-		stransd.performTrans();
-		cout << stransd.getScore() <<"%"<< endl;*/
+		AffineSemi atransd(X, XT, k);
+		atransd.setT(T);
+		atransd.performTrans();
+		afineout << atransd.getScore() << endl;
 
 		//TransD		
 		/*TransD transd(X, T, k);
