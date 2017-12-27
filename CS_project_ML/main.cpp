@@ -1,5 +1,6 @@
 #include<iostream>
 #include"KnnBayesSemi.h"
+#include"AffineSemi.h"
 #include"Utility.h"
 #include"MyData.h"
 using namespace std;
@@ -12,7 +13,7 @@ int main() {
 	string labelname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\d1_s\\label01.txt";
 	//string labelname ="C:\\Users\\steven954211\\Source\\Repos\\testData2\\d1_s\\label01.txt";
 	int k = 1;
-	int fold_num = 1;
+	int fold_num = 5;
 	//------------------------
 
 	double validation_err = 0;
@@ -27,6 +28,7 @@ int main() {
 		vector<int> result;
 		vector<vector<double>> new_dis;
 
+		labelname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\d1_s\\label0" + to_string(i) + ".txt";
 		extractData(X, XT, T, dirname, labelname);
 		//extractData(X, T, dirname, i);
 
@@ -35,7 +37,14 @@ int main() {
 		stransd.setT(T);
 		stransd.performTrans();
 		stransd.getSortedMatrix(new_dis);
-		cout << stransd.getScore() <<"%"<< endl;;
+		cout << stransd.getScore() <<"%"<< endl;
+
+		//AffineSemi
+		/*AffineSemi stransd(X, XT, k);
+		stransd.setT(T);
+		stransd.performTrans();
+		stransd.getSortedMatrix(new_dis);
+		cout << stransd.getScore() <<"%"<< endl;*/
 
 		//TransD		
 		/*TransD transd(X, T, k);

@@ -18,7 +18,16 @@ KnnBayesTransD::KnnBayesTransD(vector<MyData> &X, vector<MyData> &T, int k) {
 		}
 	}
 }
-
+void KnnBayesTransD::predict_thread(int n) {
+	//get knn class weight and label
+	KNNClassifier knn(total_data, k);
+	for (int i = X.size(); i < total_data.size(); i++) {
+		if (i % THREAD_NUM == n) {
+			vector<double> dis_vector(dis_matrix[i].begin(), dis_matrix[i].end());
+			total_data[i].knn_label = knn.bayesprediction(total_data[i], dis_vector);
+		}		
+	}
+}
 void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, vector<vector<vector<pair<int, double>>>> &knn_results) {
 
 	double v = 0.1;
@@ -38,18 +47,20 @@ void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, v
 
 		cout << "Round " << rc + 1 << " ." << endl;
 
-		//get knn class weight and label
+		//create thread
+		vector<thread> threads;
 		vector<vector<pair<int, double>>> tmpknn_result;
-		KNNClassifier knn(total_data, k);
-		for (int i = X.size(); i < total_data.size(); i++) {			
-			vector<double> dis_vector(dis_matrix[i].begin(), dis_matrix[i].end());
-			total_data[i].knn_label = knn.bayesprediction(total_data[i], dis_vector);
-			tmpknn_result.push_back(total_data[i].class_w_table);
-			//cout << "No." << total_data[i].num << " classify as " << total_data[i].knn_label << endl;
+		for (int i = 0; i < THREAD_NUM; i++) {
+			threads.push_back(thread(&KnnBayesTransD::predict_thread, this, i));
 		}
+		//join thread
+		for (int i = 0; i < THREAD_NUM; i++) {
+			threads[i].join();
+		}		
 
 		//record knn results
-		knn_results.push_back(tmpknn_result);
+		//useless now
+		//knn_results.push_back(tmpknn_result);
 
 		//for each pair, calculate new dis
 		for (int i = 0; i < total_data.size(); i++) {
@@ -84,7 +95,7 @@ void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, v
 			//cout << knn_result << "    " << nmi_result << endl;
 			if (knn_result != nmi_result) {
 				check_flag = false;
-				cout << "T[" << i << "] fail, 1nn = " << knn_result << ", 1mi = " << nmi_result << endl;
+				//cout << "T[" << i << "] fail, 1nn = " << knn_result << ", 1mi = " << nmi_result << endl;
 				break;
 			}
 		}
@@ -114,7 +125,7 @@ void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, v
 		out.close();
 
 		if (check_flag) {
-			cout << "KnnBayesTransD done by 1-NN and 1mi match." << endl;
+			//cout << "KnnBayesTransD done by 1-NN and 1mi match." << endl;
 			break;
 		}		
 	}

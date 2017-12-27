@@ -116,6 +116,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AffineSemi.cpp" />
     <ClCompile Include="BaseClassifier.cpp" />
     <ClCompile Include="KnnBayesSemi.cpp" />
     <ClCompile Include="KnnBayesTransD.cpp" />
@@ -128,6 +129,7 @@
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AffineSemi.h" />
     <ClInclude Include="BaseClassifier.h" />
     <ClInclude Include="KnnBayesSemi.h" />
     <ClInclude Include="KnnBayesTransD.h" />

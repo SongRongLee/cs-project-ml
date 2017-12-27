@@ -45,6 +45,9 @@
     <ClCompile Include="KnnBayesTransD.cpp">
       <Filter>原始程式檔</Filter>
     </ClCompile>
+    <ClCompile Include="AffineSemi.cpp">
+      <Filter>原始程式檔</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseClassifier.h">
@@ -72,6 +75,9 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="KnnBayesSemi.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="AffineSemi.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>
