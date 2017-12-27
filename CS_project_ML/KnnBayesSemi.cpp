@@ -45,7 +45,11 @@ void KnnBayesSemi::preTrain() {
 	//Eigen::MatrixXd first_matrix_inverse = first_matrix.completeOrthogonalDecomposition().pseudoInverse();
 	Eigen::MatrixXd first_matrix_inverse = first_matrix.inverse();
 	god_matrix = first_matrix_inverse*last_matrix;
-	//cout << god_matrix;
+
+	/*ofstream f2out("god_matrix.txt");
+	f2out << god_matrix;
+	f2out.close();*/
+
 	cout << "Pre-train done." << endl;
 }
 

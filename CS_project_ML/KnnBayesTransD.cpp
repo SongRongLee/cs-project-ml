@@ -18,9 +18,8 @@ KnnBayesTransD::KnnBayesTransD(vector<MyData> &X, vector<MyData> &T, int k) {
 		}
 	}
 }
-void KnnBayesTransD::predict_thread(int n) {
-	//get knn class weight and label
-	KNNClassifier knn(total_data, k);
+void KnnBayesTransD::predict_thread(int n, KNNClassifier knn) {
+	//get knn class weight and label	
 	for (int i = X.size(); i < total_data.size(); i++) {
 		if (i % THREAD_NUM == n) {
 			vector<double> dis_vector(dis_matrix[i].begin(), dis_matrix[i].end());
@@ -45,13 +44,14 @@ void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, v
 		double r = 0.5;
 		double w = 1.05;
 
-		cout << "Round " << rc + 1 << " ." << endl;
+		//cout << "Round " << rc + 1 << " ." << endl;
 
 		//create thread
 		vector<thread> threads;
 		vector<vector<pair<int, double>>> tmpknn_result;
+		KNNClassifier knn(total_data, k);
 		for (int i = 0; i < THREAD_NUM; i++) {
-			threads.push_back(thread(&KnnBayesTransD::predict_thread, this, i));
+			threads.push_back(thread(&KnnBayesTransD::predict_thread, this, i, knn));
 		}
 		//join thread
 		for (int i = 0; i < THREAD_NUM; i++) {

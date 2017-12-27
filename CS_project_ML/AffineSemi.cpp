@@ -62,7 +62,7 @@ void AffineSemi::preTrain() {
 	tmp_vector.push_back(1);
 	god_matrix.row(total_data.size()) = Eigen::VectorXd::Map(&tmp_vector[0], tmp_vector.size());
 
-	ofstream f1out("last_matrix.txt");
+	/*ofstream f1out("last_matrix.txt");
 	f1out << last_matrix;
 	f1out.close();
 
@@ -70,7 +70,7 @@ void AffineSemi::preTrain() {
 	f2out << god_matrix;
 	f2out.close();
 
-	cout << "Pre-train done." << endl;
+	cout << "Pre-train done." << endl;*/
 }
 
 void AffineSemi::setT(vector<MyData> &T) {
