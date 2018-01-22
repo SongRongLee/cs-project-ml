@@ -1,10 +1,10 @@
-#ifndef AFFINESEMI_H
-#define AFFINESEMI_H
+#ifndef NONLINEARSEMI_H
+#define NONLINEARSEMI_H
 
 #include"SemiTransD.h"
 #include"KnnBayesTransD.h"
 
-class AffineSemi : public SemiTransD
+class NonlinearSemi : public SemiTransD
 {
 private:
 	int k;
@@ -20,7 +20,7 @@ private:
 	void fillDismatrix();
 
 public:
-	AffineSemi(vector<MyData> &X, vector<MyData> &XT, int k);
+	NonlinearSemi(vector<MyData> &X, vector<MyData> &XT, int k);
 	void performTrans();
 	void setT(vector<MyData> &T);
 	void getSortedMatrix(vector<vector<double>> &new_dis);

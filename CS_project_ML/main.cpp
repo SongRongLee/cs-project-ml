@@ -1,17 +1,17 @@
 #include<iostream>
 #include"KnnBayesSemi.h"
-#include"AffineSemi.h"
+#include"NonlinearSemi.h"
 #include"Utility.h"
 #include"MyData.h"
 using namespace std;
 int main() {
 
 	//---user define params---
-	ofstream afineout("afine.txt");
+	ofstream afineout("nonlinear.txt");
 	ofstream inverseout("inverse.txt");
-	string dirname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\ecoli_s.data";
+	string dirname = "C:\\Users\\Hubert\\Desktop\\CS_project\\testData2\\ecoli_s.data";
 	//string dirname = "C:\\Users\\steven954211\\Source\\Repos\\testData2\\d1_s.data";
-	string labelname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\d1_s\\label01.txt";
+	string labelname = "C:\\Users\\Hubert\\Desktop\\CS_project\\testData2\\d1_s\\label01.txt";
 	//string labelname ="C:\\Users\\steven954211\\Source\\Repos\\testData2\\d1_s\\label01.txt";
 	int k = 1;
 	int fold_num = 50;
@@ -29,7 +29,7 @@ int main() {
 		vector<int> result;
 		vector<vector<double>> new_dis;
 
-		labelname = "C:\\Users\\Hubert_Lee\\Desktop\\CS_project\\testData2\\ecoli_s\\label" + to_string(i/10) + to_string(i%10) + ".txt";
+		labelname = "C:\\Users\\Hubert\\Desktop\\CS_project\\testData2\\ecoli_s\\label" + to_string(i/10) + to_string(i%10) + ".txt";
 		extractData(X, XT, T, dirname, labelname);
 		//extractData(X, T, dirname, i);
 
@@ -40,10 +40,10 @@ int main() {
 		inverseout << stransd.getScore() << endl;
 
 		//AffineSemi
-		AffineSemi atransd(X, XT, k);
-		atransd.setT(T);
-		atransd.performTrans();
-		afineout << atransd.getScore() << endl;
+		/*NonlinearSemi ntransd(X, XT, k);
+		ntransd.setT(T);
+		ntransd.performTrans();
+		afineout << ntransd.getScore() << endl;*/
 
 		//TransD		
 		/*TransD transd(X, T, k);

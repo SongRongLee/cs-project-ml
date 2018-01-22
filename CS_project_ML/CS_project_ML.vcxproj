@@ -68,7 +68,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>eigen;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>eigen;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -116,7 +121,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AffineSemi.cpp" />
+    <ClCompile Include="NonlinearSemi.cpp" />
     <ClCompile Include="BaseClassifier.cpp" />
     <ClCompile Include="KnnBayesSemi.cpp" />
     <ClCompile Include="KnnBayesTransD.cpp" />
@@ -129,7 +134,7 @@
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AffineSemi.h" />
+    <ClInclude Include="NonlinearSemi.h" />
     <ClInclude Include="BaseClassifier.h" />
     <ClInclude Include="KnnBayesSemi.h" />
     <ClInclude Include="KnnBayesTransD.h" />

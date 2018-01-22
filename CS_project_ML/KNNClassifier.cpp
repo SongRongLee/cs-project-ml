@@ -278,7 +278,8 @@ int KNNClassifier::prediction(MyData &t, vector<double> dis_vector) {
 	vector<pair<int, double>> dis_pair;
 
 	for (int i = 0; i < vsize; i++) {
-		dis_pair.push_back(pair<int, double>(X[i].label, abs(dis_vector[i])));
+		//dis_pair.push_back(pair<int, double>(X[i].label, abs(dis_vector[i])));
+		dis_pair.push_back(pair<int, double>(X[i].label, dis_vector[i]));
 	}
 
 	partial_sort(dis_pair.begin(), dis_pair.begin() + k, dis_pair.end(), compfunc);

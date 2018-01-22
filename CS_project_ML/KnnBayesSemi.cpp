@@ -155,10 +155,10 @@ void KnnBayesSemi::performTrans() {
 			dis_matrixs[dis_matrixs.size() - 1][i][j] = final_dis(j, 0);
 		}
 		//output new dis
-		string title = "testing_dis_inverse" + to_string(T[i- train_data_size].num) + ".txt";
+		/*string title = "testing_dis_inverse" + to_string(T[i- train_data_size].num) + ".txt";
 		ofstream out(title);
 		out << final_dis;
-		out.close();
+		out.close();*/
 	}
 	//maybe wrong
 	/*for (int i = 0; i < T.size(); i++)

@@ -1,5 +1,5 @@
-#include"AffineSemi.h"
-AffineSemi::AffineSemi(vector<MyData> &X, vector<MyData> &XT, int k) {
+#include"NonlinearSemi.h"
+NonlinearSemi::NonlinearSemi(vector<MyData> &X, vector<MyData> &XT, int k) {
 	this->X = X;
 	this->XT = XT;
 	this->k = k;
@@ -28,7 +28,7 @@ AffineSemi::AffineSemi(vector<MyData> &X, vector<MyData> &XT, int k) {
 	preTrain();
 }
 
-void AffineSemi::preTrain() {
+void NonlinearSemi::preTrain() {
 	//cout << "Pre-training..." << endl;
 	KnnBayesTransD transd(X, XT, k);
 	transd.performTrans(dis_matrixs, knn_results);
@@ -37,32 +37,43 @@ void AffineSemi::preTrain() {
 	}
 
 	//setup first matrix
-	Eigen::MatrixXd first_matrix(total_data.size()+1, total_data.size());
+	Eigen::MatrixXd first_matrix(total_data.size() * 2, total_data.size());
 	for (int i = 0; i < total_data.size(); i++) {
 		vector<double> tmp_vector(dis_matrixs[0][i]);
 		first_matrix.row(i) = Eigen::VectorXd::Map(&tmp_vector[0], tmp_vector.size());
 	}
-	vector<double> tmp_vector(total_data.size(), 1);
-	first_matrix.row(total_data.size()) = Eigen::VectorXd::Map(&tmp_vector[0], tmp_vector.size());
-	
+	for (int i = total_data.size(); i < total_data.size() * 2; i++) {
+		vector<double> tmp_vector(dis_matrixs[0][i - total_data.size()]);
+		for (int j = 0; j < total_data.size(); j++) {
+			tmp_vector[j] = tmp_vector[j] * tmp_vector[j];
+		}
+		first_matrix.row(i) = Eigen::VectorXd::Map(&tmp_vector[0], tmp_vector.size());
+	}
+
 	//setup last matrix
-	Eigen::MatrixXd last_matrix(total_data.size()+1, total_data.size());
+	Eigen::MatrixXd last_matrix(total_data.size() * 2, total_data.size());
 	for (int i = 0; i < total_data.size(); i++) {
 		vector<double> tmp_vector(dis_matrixs[dis_matrixs.size() - 1][i]);
 		last_matrix.row(i) = Eigen::VectorXd::Map(&tmp_vector[0], tmp_vector.size());
 	}
-	tmp_vector = vector<double>(total_data.size(), 1);
-	last_matrix.row(total_data.size()) = Eigen::VectorXd::Map(&tmp_vector[0], tmp_vector.size());
+	for (int i = total_data.size(); i < total_data.size() * 2; i++) {
+		vector<double> tmp_vector(dis_matrixs[dis_matrixs.size() - 1][i - total_data.size()]);
+		for (int j = 0; j < total_data.size(); j++) {
+			tmp_vector[j] = tmp_vector[j] * tmp_vector[j];
+		}
+		last_matrix.row(i) = Eigen::VectorXd::Map(&tmp_vector[0], tmp_vector.size());
+	}
 
 	//calculate god matrix
 	Eigen::MatrixXd first_matrix_inverse = first_matrix.completeOrthogonalDecomposition().pseudoInverse();
 	//Eigen::MatrixXd first_matrix_inverse = first_matrix.inverse();
 	god_matrix = last_matrix*first_matrix_inverse;
-	tmp_vector = vector<double>(total_data.size(), 0);
-	tmp_vector.push_back(1);
-	god_matrix.row(total_data.size()) = Eigen::VectorXd::Map(&tmp_vector[0], tmp_vector.size());
 
-	/*ofstream f1out("last_matrix.txt");
+	ofstream f0out("first_matrix.txt");
+	f0out << first_matrix;
+	f0out.close();
+
+	ofstream f1out("last_matrix.txt");
 	f1out << last_matrix;
 	f1out.close();
 
@@ -70,10 +81,10 @@ void AffineSemi::preTrain() {
 	f2out << god_matrix;
 	f2out.close();
 
-	cout << "Pre-train done." << endl;*/
+	//cout << "Pre-train done." << endl;
 }
 
-void AffineSemi::setT(vector<MyData> &T) {
+void NonlinearSemi::setT(vector<MyData> &T) {
 	//reset previous data
 	total_data.erase(total_data.begin() + X.size() + XT.size(), total_data.end());
 	//set new data
@@ -87,7 +98,7 @@ void AffineSemi::setT(vector<MyData> &T) {
 	fillDismatrix();
 }
 
-void AffineSemi::fillDismatrix() {
+void NonlinearSemi::fillDismatrix() {
 	//resize to X+XT+T square
 	for (int i = 0; i < dis_matrixs.size(); i++) {
 		dis_matrixs[i].resize(total_data.size());
@@ -99,14 +110,16 @@ void AffineSemi::fillDismatrix() {
 	genDismatrix(total_data, dis_matrixs[0]);
 }
 
-void AffineSemi::performTrans() {
+void NonlinearSemi::performTrans() {
 	int train_data_size = X.size() + XT.size();
 
 	for (int i = train_data_size; i < total_data.size(); i++)
 	{
 		vector<double> tmp_vector(dis_matrixs[0][i]);
-		tmp_vector.push_back(1);
-		Eigen::VectorXd test = Eigen::VectorXd::Map(&tmp_vector[0], train_data_size + 1);
+		for (int j = 0; j < train_data_size; j++) {
+			tmp_vector.push_back(tmp_vector[j] * tmp_vector[j]);
+		}
+		Eigen::VectorXd test = Eigen::VectorXd::Map(&tmp_vector[0], train_data_size * 2);
 		//Eigen::VectorXd test = Eigen::VectorXd::Map(&tmp_vector[0], train_data_size);
 		Eigen::VectorXd final_dis = god_matrix*test;
 		//set new dis
@@ -121,10 +134,10 @@ void AffineSemi::performTrans() {
 		out.close();
 	}
 }
-void AffineSemi::getSortedMatrix(vector<vector<double>> &new_dis) {
+void NonlinearSemi::getSortedMatrix(vector<vector<double>> &new_dis) {
 	indexSortedMatrix(total_data, dis_matrixs[dis_matrixs.size() - 1], new_dis);
 }
-double AffineSemi::getScore() {
+double NonlinearSemi::getScore() {
 	vector<int> results;
 	int train_data_size = X.size() + XT.size();
 	vector<MyData> train_data(total_data.begin(), total_data.begin() + train_data_size);
