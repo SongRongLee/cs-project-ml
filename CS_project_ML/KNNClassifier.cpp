@@ -10,7 +10,9 @@ KNNClassifier::KNNClassifier(vector<MyData> &X, int k):BaseClassifier(X) {
 bool compfunc(pair<int, double> a, pair<int, double> b) {
 	return a.second < b.second;
 }
-
+bool compfunc_label(pair<int, double> a, pair<int, double> b) {
+	return a.first < b.first;
+}
 bool compfunc2(pair<vector<pair<int, double>>, double> a, pair<vector<pair<int, double>>, double> b)
 {
 	return a.second < b.second;
@@ -235,20 +237,21 @@ int KNNClassifier::prediction(MyData &t) {
 		return -1;
 	}
 
-	vector<pair<int, double>> dis_vector;
+	vector<pair<int, double>> dis_pair;
 
 	for (int i = 0; i < vsize; i++) {
-		dis_vector.push_back(pair<int, double>(X[i].label, calDistance(t, X[i], dis_type)));
+		dis_pair.push_back(pair<int, double>(X[i].label, calDistance(t, X[i], dis_type)));
 	}
 
-	partial_sort(dis_vector.begin(), dis_vector.begin()+k, dis_vector.end(), compfunc);
+	partial_sort(dis_pair.begin(), dis_pair.begin() + k, dis_pair.end(), compfunc);
+	sort(dis_pair.begin(), dis_pair.begin() + k, compfunc_label);
 
 	int fcount = 1, maxfcount = 1;
-	int pre_class = dis_vector[0].first;
+	int pre_class = dis_pair[0].first;
 	int max_class = pre_class;
 
 	for (int i = 1; i < k; i++) {
-		if (dis_vector[i].first == pre_class) {
+		if (dis_pair[i].first == pre_class) {
 			fcount++;
 			if (fcount > maxfcount) {
 				maxfcount = fcount;
@@ -257,7 +260,7 @@ int KNNClassifier::prediction(MyData &t) {
 		}
 		else {
 			fcount = 1;
-			pre_class = dis_vector[i].first;
+			pre_class = dis_pair[i].first;
 		}
 	}
 
@@ -283,6 +286,7 @@ int KNNClassifier::prediction(MyData &t, vector<double> dis_vector) {
 	}
 
 	partial_sort(dis_pair.begin(), dis_pair.begin() + k, dis_pair.end(), compfunc);
+	sort(dis_pair.begin(), dis_pair.begin() + k, compfunc_label);
 
 	int fcount = 1, maxfcount = 1;
 	int pre_class = dis_pair[0].first;
@@ -306,6 +310,48 @@ int KNNClassifier::prediction(MyData &t, vector<double> dis_vector) {
 
 	return max_class;
 }
+
+/*int KNNClassifier::adaptive_prediction(MyData &t, vector<double> dis_vector) {
+
+	int vsize = X.size();
+	if (vsize == 0) {
+		cout << "Prediciton error, not enough data.\n";
+		return -1;
+	}
+
+	vector<pair<MyData, double>> dis_pair;
+
+	for (int i = 0; i < vsize; i++) {
+		//dis_pair.push_back(pair<int, double>(X[i].label, abs(dis_vector[i])));
+		dis_pair.push_back(pair<MyData, double>(X[i], dis_vector[i]));
+	}
+
+	sort(dis_pair.begin(), dis_pair.end(), compfunc);
+
+	bool find_labeled = false;
+	for (int temp_k = 1; temp_k < vsize; temp_k++) {
+		int fcount = 1, maxfcount = 1;
+		int pre_class = dis_pair[0].first.label;
+		int max_class = pre_class;
+		for (int i = 1; i < temp_k; i++) {
+			if (dis_pair[i].first.label == pre_class) {
+				fcount++;
+				if (fcount > maxfcount) {
+					maxfcount = fcount;
+					max_class = pre_class;
+				}
+			}
+			else {
+				fcount = 1;
+				pre_class = dis_pair[i].first;
+			}
+		}
+	}
+	//set class weight
+	t.class_w = (double)maxfcount / (double)k;
+
+	return max_class;
+}*/
 
 vector<int> KNNClassifier::prediction(vector<MyData> &T) {
 

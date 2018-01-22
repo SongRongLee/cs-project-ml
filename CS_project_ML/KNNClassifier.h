@@ -17,6 +17,7 @@ public:
 	KNNClassifier(vector<MyData> &X, int k);
 	int prediction(MyData &t);
 	int prediction(MyData &t, vector<double> dis_vector);
+	int adaptive_prediction(MyData &t, vector<double> dis_vector);
 	int bayesprediction(MyData &t, vector<double> dis_vector);
 	vector<int> prediction(vector<MyData> &T);
 	void setK(int k);

@@ -9,7 +9,7 @@ int main() {
 	//---user define params---
 	ofstream afineout("nonlinear.txt");
 	ofstream inverseout("inverse.txt");
-	string dirname = "C:\\Users\\Hubert\\Desktop\\CS_project\\testData2\\ecoli_s.data";
+	string dirname = "C:\\Users\\Hubert\\Desktop\\CS_project\\testData2\\d1_s.data";
 	//string dirname = "C:\\Users\\steven954211\\Source\\Repos\\testData2\\d1_s.data";
 	string labelname = "C:\\Users\\Hubert\\Desktop\\CS_project\\testData2\\d1_s\\label01.txt";
 	//string labelname ="C:\\Users\\steven954211\\Source\\Repos\\testData2\\d1_s\\label01.txt";
@@ -29,7 +29,7 @@ int main() {
 		vector<int> result;
 		vector<vector<double>> new_dis;
 
-		labelname = "C:\\Users\\Hubert\\Desktop\\CS_project\\testData2\\ecoli_s\\label" + to_string(i/10) + to_string(i%10) + ".txt";
+		labelname = "C:\\Users\\Hubert\\Desktop\\CS_project\\testData2\\d1_s\\label" + to_string(i/10) + to_string(i%10) + ".txt";
 		extractData(X, XT, T, dirname, labelname);
 		//extractData(X, T, dirname, i);
 

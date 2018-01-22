@@ -32,9 +32,9 @@ void KnnBayesSemi::preTrain() {
 	//cout << "Pre-training..." << endl;
 	KnnBayesTransD transd(X, XT, k);
 	transd.performTrans(dis_matrixs, knn_results);
-	for (int i = X.size(); i < X.size() + XT.size(); i++) {
+	/*for (int i = X.size(); i < X.size() + XT.size(); i++) {
 		total_data[i].is_train = true;
-	}
+	}*/
 
 	Eigen::MatrixXd first_matrix(total_data.size(), total_data.size());
 	for (int i = 0; i < total_data.size(); i++)
@@ -170,8 +170,6 @@ void KnnBayesSemi::performTrans() {
 		printTestDis(dis_matrixs, T[i].num, total_data, out);
 		out.close();
 	}*/
-	
-
 }
 void KnnBayesSemi::getSortedMatrix(vector<vector<double>> &new_dis) {
 	indexSortedMatrix(total_data, dis_matrixs[dis_matrixs.size() - 1], new_dis);
