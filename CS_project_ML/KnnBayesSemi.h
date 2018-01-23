@@ -10,7 +10,7 @@ private:
 	int k;
 	int round_limit;
 	vector<vector<vector<double>>> dis_matrixs;
-	vector<vector<vector<pair<int, double>>>> knn_results;
+	vector<int> knn_results;
 	vector<MyData> X;
 	vector<MyData> XT;
 	vector<MyData> T;

@@ -4,6 +4,7 @@
 #include<iostream>
 #include<cmath>
 #include<algorithm>
+#include<map>
 #include"BaseClassifier.h"
 #include"MyData.h"
 #include"Utility.h"

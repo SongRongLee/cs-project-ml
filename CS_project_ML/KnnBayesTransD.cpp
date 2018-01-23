@@ -27,7 +27,7 @@ void KnnBayesTransD::predict_thread(int n, KNNClassifier knn) {
 		}		
 	}
 }
-void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, vector<vector<vector<pair<int, double>>>> &knn_results) {
+void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, vector<int> &knn_results) {
 
 	double v = 0.1;
 	
@@ -37,6 +37,7 @@ void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, v
 	vector<vector<double>> tmpdis;
 
 	dis_matrixs.push_back(dis_matrix);
+	knn_results.resize(T.size());
 	tmpdis = dis_matrix;
 
 	for (int rc = 0; rc < round_limit; rc++) {
@@ -57,22 +58,21 @@ void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, v
 		for (int i = 0; i < THREAD_NUM; i++) {
 			threads[i].join();
 		}		
-
-		//record knn results
-		//useless now
-		//knn_results.push_back(tmpknn_result);
-
+		//set bayes knn results
+		for (int i = X.size(); i < total_data.size(); i++) {
+			knn_results[i - X.size()] = total_data[i].knn_label;
+		}
 		//for each pair, calculate new dis
 		for (int i = 0; i < total_data.size(); i++) {
 			for (int j = i + 1; j < total_data.size(); j++) {
 				double f = 1;
 				//
-				if (total_data[i].is_train || total_data[j].is_train) {
+				/*if (total_data[i].is_train || total_data[j].is_train) {
 					lambda = 1;
 				}
 				else {
 					lambda = 0.5;
-				}
+				}*/
 				//
 				epsilon = lambda * total_data[i].class_w * total_data[j].class_w;
 				if (r <= epsilon) {

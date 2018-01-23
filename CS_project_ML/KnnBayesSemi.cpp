@@ -32,9 +32,9 @@ void KnnBayesSemi::preTrain() {
 	//cout << "Pre-training..." << endl;
 	KnnBayesTransD transd(X, XT, k);
 	transd.performTrans(dis_matrixs, knn_results);
-	/*for (int i = X.size(); i < X.size() + XT.size(); i++) {
-		total_data[i].is_train = true;
-	}*/
+	for (int i = X.size(); i < X.size() + XT.size(); i++) {
+		total_data[i].real_label = knn_results[i - X.size()];
+	}
 
 	Eigen::MatrixXd first_matrix(total_data.size(), total_data.size());
 	for (int i = 0; i < total_data.size(); i++)
@@ -182,10 +182,11 @@ double KnnBayesSemi::getScore() {
 	for (int j = 0; j < train_data.size(); j++) {
 		train_data[j].label = train_data[j].real_label;
 	}
-	KNNClassifier one_nn(train_data, 1);
+	KNNClassifier adaptive_knn(train_data, 1);
 	for (int i = train_data_size; i < total_data.size(); i++) {		
 		vector<double> dis_vector(dis_matrixs[dis_matrixs.size() - 1][i].begin(), dis_matrixs[dis_matrixs.size() - 1][i].begin() + train_data_size);
-		results.push_back(one_nn.prediction(total_data[i], dis_vector));
+		//results.push_back(adaptive_knn.adaptive_prediction(total_data[i], dis_vector));
+		results.push_back(adaptive_knn.prediction(total_data[i], dis_vector));
 	}
 	double wrong_count = checkResult(results, T);
 	return (double)(T.size() - wrong_count) / (double)T.size() * 100;

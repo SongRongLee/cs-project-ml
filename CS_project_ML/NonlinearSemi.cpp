@@ -33,9 +33,10 @@ void NonlinearSemi::preTrain() {
 	KnnBayesTransD transd(X, XT, k);
 	transd.performTrans(dis_matrixs, knn_results);
 	for (int i = X.size(); i < X.size() + XT.size(); i++) {
-		total_data[i].is_train = true;
+		total_data[i].real_label = knn_results[i - X.size()];
 	}
 
+	/*
 	//setup first matrix
 	Eigen::MatrixXd first_matrix(total_data.size() * 2, total_data.size());
 	for (int i = 0; i < total_data.size(); i++) {
@@ -63,13 +64,32 @@ void NonlinearSemi::preTrain() {
 		}
 		last_matrix.row(i) = Eigen::VectorXd::Map(&tmp_vector[0], tmp_vector.size());
 	}
+	*/
+
+	//setup first matrix
+	Eigen::MatrixXd first_matrix(total_data.size() + 1, total_data.size());
+	for (int i = 0; i < total_data.size(); i++) {
+		vector<double> tmp_vector(dis_matrixs[0][i]);
+		first_matrix.row(i) = Eigen::VectorXd::Map(&tmp_vector[0], tmp_vector.size());
+	}
+	vector<double> tmp_vector(total_data.size(), 1);
+	first_matrix.row(total_data.size()) = Eigen::VectorXd::Map(&tmp_vector[0], tmp_vector.size());
+
+	//setup last matrix
+	Eigen::MatrixXd last_matrix(total_data.size() + 1, total_data.size());
+	for (int i = 0; i < total_data.size(); i++) {
+		vector<double> tmp_vector(dis_matrixs[dis_matrixs.size() - 1][i]);
+		last_matrix.row(i) = Eigen::VectorXd::Map(&tmp_vector[0], tmp_vector.size());
+	}
+	tmp_vector = vector<double>(total_data.size(), 1);
+	last_matrix.row(total_data.size()) = Eigen::VectorXd::Map(&tmp_vector[0], tmp_vector.size());
 
 	//calculate god matrix
 	Eigen::MatrixXd first_matrix_inverse = first_matrix.completeOrthogonalDecomposition().pseudoInverse();
 	//Eigen::MatrixXd first_matrix_inverse = first_matrix.inverse();
 	god_matrix = last_matrix*first_matrix_inverse;
 
-	ofstream f0out("first_matrix.txt");
+	/*ofstream f0out("first_matrix.txt");
 	f0out << first_matrix;
 	f0out.close();
 
@@ -79,7 +99,7 @@ void NonlinearSemi::preTrain() {
 
 	ofstream f2out("god_matrix.txt");
 	f2out << god_matrix;
-	f2out.close();
+	f2out.close();*/
 
 	//cout << "Pre-train done." << endl;
 }
@@ -119,8 +139,8 @@ void NonlinearSemi::performTrans() {
 		for (int j = 0; j < train_data_size; j++) {
 			tmp_vector.push_back(tmp_vector[j] * tmp_vector[j]);
 		}
-		Eigen::VectorXd test = Eigen::VectorXd::Map(&tmp_vector[0], train_data_size * 2);
-		//Eigen::VectorXd test = Eigen::VectorXd::Map(&tmp_vector[0], train_data_size);
+		//Eigen::VectorXd test = Eigen::VectorXd::Map(&tmp_vector[0], train_data_size * 2);
+		Eigen::VectorXd test = Eigen::VectorXd::Map(&tmp_vector[0], train_data_size + 1);
 		Eigen::VectorXd final_dis = god_matrix*test;
 		//set new dis
 		for (int j = 0; j < train_data_size; j++)
@@ -128,10 +148,10 @@ void NonlinearSemi::performTrans() {
 			dis_matrixs[dis_matrixs.size() - 1][i][j] = final_dis(j, 0);
 		}
 		//output new dis
-		string title = "testing_dis_inverse" + to_string(T[i - train_data_size].num) + ".txt";
+		/*string title = "testing_dis_inverse" + to_string(T[i - train_data_size].num) + ".txt";
 		ofstream out(title);
 		out << final_dis;
-		out.close();
+		out.close();*/
 	}
 }
 void NonlinearSemi::getSortedMatrix(vector<vector<double>> &new_dis) {

@@ -17,7 +17,7 @@ private:
 	void predict_thread(int n, KNNClassifier knn);
 public:
 	KnnBayesTransD(vector<MyData> &X, vector<MyData> &T, int k);
-	void performTrans(vector<vector<vector<double>>> &dis_matrixs, vector<vector<vector<pair<int, double>>>> &knn_results);
+	void performTrans(vector<vector<vector<double>>> &dis_matrixs, vector<int> &knn_results);
 };
 
 #endif

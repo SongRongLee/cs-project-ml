@@ -13,11 +13,14 @@ bool compfunc(pair<int, double> a, pair<int, double> b) {
 bool compfunc_label(pair<int, double> a, pair<int, double> b) {
 	return a.first < b.first;
 }
-bool compfunc2(pair<vector<pair<int, double>>, double> a, pair<vector<pair<int, double>>, double> b)
+bool compfunc_mydata(pair<MyData, double> a, pair<MyData, double> b) {
+	return a.second < b.second;
+}
+bool compfunc_dispair(pair<vector<pair<int, double>>, double> a, pair<vector<pair<int, double>>, double> b)
 {
 	return a.second < b.second;
 }
-bool compfunc3(pair<int, double> a, pair<int, double> b) {
+bool compfunc_descend(pair<int, double> a, pair<int, double> b) {
 	return a.second > b.second;
 }
 
@@ -69,7 +72,7 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 	vector<vector<pair<int, double>>> table;
 
 	//sort dis_pair using distance
-	sort(dis_pair.begin(), dis_pair.end(), compfunc2);
+	sort(dis_pair.begin(), dis_pair.end(), compfunc_dispair);
 
 	//enumerate knn, k = 1~vize-1
 	for (int i = 1; i < vsize; i++)
@@ -143,7 +146,7 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 			disum += dis_pair[j].second;
 		}
 		
-		sort(table[i].begin(), table[i].end(), compfunc3);
+		sort(table[i].begin(), table[i].end(), compfunc_descend);
 		int id = -1;
 		for (int j = 0; j < labeled_ratio.size(); j++)
 		{
@@ -311,7 +314,7 @@ int KNNClassifier::prediction(MyData &t, vector<double> dis_vector) {
 	return max_class;
 }
 
-/*int KNNClassifier::adaptive_prediction(MyData &t, vector<double> dis_vector) {
+int KNNClassifier::adaptive_prediction(MyData &t, vector<double> dis_vector) {
 
 	int vsize = X.size();
 	if (vsize == 0) {
@@ -326,32 +329,38 @@ int KNNClassifier::prediction(MyData &t, vector<double> dis_vector) {
 		dis_pair.push_back(pair<MyData, double>(X[i], dis_vector[i]));
 	}
 
-	sort(dis_pair.begin(), dis_pair.end(), compfunc);
+	sort(dis_pair.begin(), dis_pair.end(), compfunc_mydata);
 
-	bool find_labeled = false;
-	for (int temp_k = 1; temp_k < vsize; temp_k++) {
-		int fcount = 1, maxfcount = 1;
-		int pre_class = dis_pair[0].first.label;
-		int max_class = pre_class;
-		for (int i = 1; i < temp_k; i++) {
-			if (dis_pair[i].first.label == pre_class) {
-				fcount++;
-				if (fcount > maxfcount) {
-					maxfcount = fcount;
-					max_class = pre_class;
-				}
-			}
-			else {
-				fcount = 1;
-				pre_class = dis_pair[i].first;
-			}
+	map<int, double> labelcount;
+
+	for (int i = 0; i < vsize; i++) {
+		map<int, double>::iterator iter = labelcount.find(dis_pair[i].first.label);
+		if (iter != labelcount.end()) {
+			labelcount[dis_pair[i].first.label] += 1 / dis_pair[i].second / dis_pair[i].second;
+		}
+		else {
+			labelcount[dis_pair[i].first.label] = 1 / dis_pair[i].second / dis_pair[i].second;
+		}
+		if (dis_pair[i].first.is_train) {
+			break;
 		}
 	}
+
 	//set class weight
-	t.class_w = (double)maxfcount / (double)k;
+	double maxcount = 0;
+	double totalcount = 0;
+	int max_class = -1;
+	for (map<int, double>::iterator iter = labelcount.begin(); iter != labelcount.end(); iter++) {
+		totalcount += iter->second;
+		if (iter->second > maxcount) {
+			max_class = iter->first;
+			maxcount = iter->second;
+		}
+	}
+	t.class_w = maxcount / totalcount;
 
 	return max_class;
-}*/
+}
 
 vector<int> KNNClassifier::prediction(vector<MyData> &T) {
 
