@@ -3,16 +3,20 @@
 #include"NonlinearSemi.h"
 #include"Utility.h"
 #include"MyData.h"
+#include"ClusterSemi.h"
+
 using namespace std;
 int main() {
 
 	//---user define params---
 	ofstream afineout("nonlinear.txt");
 	ofstream inverseout("inverse.txt");
-	string dirname = "C:\\Users\\Hubert\\Desktop\\CS_project\\testData2\\d1_s.data";
+	ofstream clusterout("cluster.txt");
+	string dirname = "C:\\Users\\Administrator\\Desktop\\testData2\\cleveland_s.data";
 	//string dirname = "C:\\Users\\steven954211\\Source\\Repos\\testData2\\d1_s.data";
-	string labeldir = "C:\\Users\\Hubert\\Desktop\\CS_project\\testData2\\d1_s\\label";
+	string labeldir = "C:\\Users\\Administrator\\Desktop\\testData2\\cleveland_s\\label";
 	//string labelname ="C:\\Users\\steven954211\\Source\\Repos\\testData2\\d1_s\\label01.txt";
+	string folder = "C:\\Users\\Administrator\\Documents\\GitHub\\CS_project_ML\\matrix\\";
 	int k = 1;
 	int fold_num = 50;
 	//------------------------
@@ -38,7 +42,18 @@ int main() {
 		stransd.setT(T);
 		stransd.performTrans();
 		inverseout << stransd.getScore() << endl;
-
+		
+		//ClusterSemi
+		ClusterSemi Cstransd(X, XT, k);
+		Cstransd.setT(T);
+		Cstransd.performTrans();
+		clusterout << Cstransd.getScore() << endl;
+		if (i == 1)
+		{
+			CreateFolder(folder);
+			Cstransd.printSortedMatrixs(folder);
+		}
+			
 		//AffineSemi
 		/*NonlinearSemi ntransd(X, XT, k);
 		ntransd.setT(T);

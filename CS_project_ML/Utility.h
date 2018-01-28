@@ -26,6 +26,7 @@ void genDismatrix(vector<MyData> &X, vector<vector<double>> &dis_matrix, int dis
 void indexSortedMatrix(vector<MyData> &total_data, vector<vector<double>> &dis_matrix, vector<vector<double>> &new_dis);
 void indexSortedAllMatrix(vector<MyData> &total_data, vector<vector<vector<double>>> &dis_matrixs, vector<vector<vector<double>>>&new_diss);
 void printDismatrix(vector<vector<double>> &dis_matrix);
+void CreateFolder(const string  path);
 void printDismatrix(vector<vector<double>> &dis_matrix, ofstream &out);
 void printTestDis(vector<vector<vector<double>>> dis_matrixs,int num, const vector<MyData> &total_data);
 void printTestDis(vector<vector<vector<double>>> dis_matrixs, int num, const vector<MyData> &total_data, ofstream &out);

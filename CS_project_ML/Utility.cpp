@@ -1,5 +1,5 @@
 #include"Utility.h"
-
+#include <windows.h>
 bool mycomp(pair<int, double> a, pair<int, double> b) {
 	return a.second < b.second;
 }
@@ -163,6 +163,13 @@ void printDismatrix(vector<vector<double>> &dis_matrix) {
 			out << left << fixed << setprecision(18) << setw(21) << dis_matrix[i][j];
 		}
 		out << endl;
+	}
+}
+void CreateFolder(const string  path)
+{
+	if (!CreateDirectoryA(path.c_str(), NULL))
+	{
+		return;
 	}
 }
 void printDismatrix(vector<vector<double>> &dis_matrix, ofstream &out) {

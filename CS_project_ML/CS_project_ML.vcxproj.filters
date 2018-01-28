@@ -48,6 +48,9 @@
     <ClCompile Include="NonlinearSemi.cpp">
       <Filter>原始程式檔</Filter>
     </ClCompile>
+    <ClCompile Include="ClusterSemi.cpp">
+      <Filter>原始程式檔</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseClassifier.h">
@@ -78,6 +81,9 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="NonlinearSemi.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="ClusterSemi.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>
