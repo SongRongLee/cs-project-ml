@@ -35,7 +35,6 @@ void NonlinearSemi::preTrain() {
 	for (int i = X.size(); i < X.size() + XT.size(); i++) {
 		total_data[i].real_label = knn_results[i - X.size()];
 	}
-
 	/*
 	//setup first matrix
 	Eigen::MatrixXd first_matrix(total_data.size() * 2, total_data.size());
@@ -63,8 +62,7 @@ void NonlinearSemi::preTrain() {
 			tmp_vector[j] = tmp_vector[j] * tmp_vector[j];
 		}
 		last_matrix.row(i) = Eigen::VectorXd::Map(&tmp_vector[0], tmp_vector.size());
-	}
-	*/
+	}*/
 
 	//setup first matrix
 	Eigen::MatrixXd first_matrix(total_data.size() + 1, total_data.size());
