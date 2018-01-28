@@ -7,23 +7,6 @@ KNNClassifier::KNNClassifier(vector<MyData> &X, int k):BaseClassifier(X) {
 	this->k = k;
 }
 
-bool compfunc(pair<int, double> a, pair<int, double> b) {
-	return a.second < b.second;
-}
-bool compfunc_label(pair<int, double> a, pair<int, double> b) {
-	return a.first < b.first;
-}
-bool compfunc_mydata(pair<MyData, double> a, pair<MyData, double> b) {
-	return a.second < b.second;
-}
-bool compfunc_dispair(pair<vector<pair<int, double>>, double> a, pair<vector<pair<int, double>>, double> b)
-{
-	return a.second < b.second;
-}
-bool compfunc_descend(pair<int, double> a, pair<int, double> b) {
-	return a.second > b.second;
-}
-
 int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 {
 	int vsize = X.size();
@@ -246,8 +229,8 @@ int KNNClassifier::prediction(MyData &t) {
 		dis_pair.push_back(pair<int, double>(X[i].label, calDistance(t, X[i], dis_type)));
 	}
 
-	partial_sort(dis_pair.begin(), dis_pair.begin() + k, dis_pair.end(), compfunc);
-	sort(dis_pair.begin(), dis_pair.begin() + k, compfunc_label);
+	partial_sort(dis_pair.begin(), dis_pair.begin() + k, dis_pair.end(), mycomp);
+	sort(dis_pair.begin(), dis_pair.begin() + k, mycomp_label);
 
 	int fcount = 1, maxfcount = 1;
 	int pre_class = dis_pair[0].first;
@@ -288,8 +271,8 @@ int KNNClassifier::prediction(MyData &t, vector<double> dis_vector) {
 		dis_pair.push_back(pair<int, double>(X[i].label, dis_vector[i]));
 	}
 
-	partial_sort(dis_pair.begin(), dis_pair.begin() + k, dis_pair.end(), compfunc);
-	sort(dis_pair.begin(), dis_pair.begin() + k, compfunc_label);
+	partial_sort(dis_pair.begin(), dis_pair.begin() + k, dis_pair.end(), mycomp);
+	sort(dis_pair.begin(), dis_pair.begin() + k, mycomp_label);
 
 	int fcount = 1, maxfcount = 1;
 	int pre_class = dis_pair[0].first;
@@ -310,7 +293,6 @@ int KNNClassifier::prediction(MyData &t, vector<double> dis_vector) {
 	}
 	//set class weight
 	t.class_w = (double)maxfcount / (double)k;
-
 	return max_class;
 }
 

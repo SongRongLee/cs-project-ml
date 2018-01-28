@@ -32,10 +32,11 @@ void KnnBayesSemi::preTrain() {
 	//cout << "Pre-training..." << endl;
 	KnnBayesTransD transd(X, XT, k);
 	transd.performTrans(dis_matrixs, knn_results);
+	//set real label for unlabel tr
 	for (int i = X.size(); i < X.size() + XT.size(); i++) {
 		total_data[i].real_label = knn_results[i - X.size()];
 	}
-
+	
 	Eigen::MatrixXd first_matrix(total_data.size(), total_data.size());
 	for (int i = 0; i < total_data.size(); i++)
 		first_matrix.row(i) = Eigen::VectorXd::Map(&dis_matrixs[0][i][0], dis_matrixs[0][i].size());
@@ -142,9 +143,7 @@ void KnnBayesSemi::performTrans() {
 	vector<vector<double>> new_dis;
 	indexSortedMatrix(total_data, dis_matrixs[dis_matrixs.size() - 1], new_dis);
 	printDismatrix(new_dis, out);
-	out.close();*/
-	
-	
+	out.close();*/	
 	for (int i = train_data_size; i < total_data.size(); i++)
 	{
 		Eigen::VectorXd test = Eigen::VectorXd::Map(&dis_matrixs[0][i][0], train_data_size);
@@ -178,15 +177,40 @@ double KnnBayesSemi::getScore() {
 	vector<int> results;
 	int train_data_size = X.size() + XT.size();
 	vector<MyData> train_data(total_data.begin(), total_data.begin() + train_data_size);
+	//calculate optimal k
+	/*int min_k = -1;
+	for (int i = 0; i < train_data_size; i++) {
+		vector<pair<int, double>> dis_pair;
+		for (int j = 0; j < train_data_size; j++) {
+			dis_pair.push_back(pair<int, double>(total_data[j].real_label, dis_matrixs[dis_matrixs.size() - 1][i][j]));
+		}
+
+		sort(dis_pair.begin(), dis_pair.end(), mycomp);
+
+		for (int j = 0; j < train_data_size; j++) {
+			if (total_data[i].real_label != dis_pair[j].first) {
+				if (min_k == -1 || min_k > j) {
+					min_k = j;
+				}
+				break;
+			}
+		}
+	}*/
 	//set real_label to label
 	for (int j = 0; j < train_data.size(); j++) {
 		train_data[j].label = train_data[j].real_label;
 	}
 	KNNClassifier adaptive_knn(train_data, 1);
+	/*vector<vector<double>> dis_matrtix(dis_matrixs[dis_matrixs.size() - 1].begin(), dis_matrixs[dis_matrixs.size() - 1].begin() + train_data_size);
+	for (int i = 0; i < train_data_size; i++) {
+		dis_matrtix[i].resize(train_data_size);
+	}
+	NMIClassifier nmi(train_data, dis_matrtix, 1);*/
 	for (int i = train_data_size; i < total_data.size(); i++) {		
 		vector<double> dis_vector(dis_matrixs[dis_matrixs.size() - 1][i].begin(), dis_matrixs[dis_matrixs.size() - 1][i].begin() + train_data_size);
 		//results.push_back(adaptive_knn.adaptive_prediction(total_data[i], dis_vector));
 		results.push_back(adaptive_knn.prediction(total_data[i], dis_vector));
+		//results.push_back(nmi.prediction(total_data[i], dis_vector));
 	}
 	double wrong_count = checkResult(results, T);
 	return (double)(T.size() - wrong_count) / (double)T.size() * 100;

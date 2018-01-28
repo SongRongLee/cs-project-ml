@@ -4,14 +4,24 @@ bool mycomp(pair<int, double> a, pair<int, double> b) {
 	return a.second < b.second;
 }
 
-bool mycomp2(pair<int, double> a, pair<int, double> b) {
+bool mycomp_label(pair<int, double> a, pair<int, double> b) {
 	return a.first < b.first;
 }
 
-bool mycompindex(MyData a, MyData b) {
+bool mycomp_index(MyData a, MyData b) {
 	return a.num < b.num;
 }
 
+bool compfunc_mydata(pair<MyData, double> a, pair<MyData, double> b) {
+	return a.second < b.second;
+}
+bool compfunc_dispair(pair<vector<pair<int, double>>, double> a, pair<vector<pair<int, double>>, double> b)
+{
+	return a.second < b.second;
+}
+bool compfunc_descend(pair<int, double> a, pair<int, double> b) {
+	return a.second > b.second;
+}
 
 string getPrefix(string dirname) {
 	int found;

@@ -16,9 +16,14 @@ void extractData(vector<MyData> &X, vector<MyData> &T, string dirname, int foldn
 //for semi-supervised
 void extractData(vector<MyData> &X, vector<MyData> &XT, vector<MyData> &T, string dataname, string labelname);
 
+//comp functions
 bool mycomp(pair<int, double> a, pair<int, double> b);
-bool mycomp2(pair<int, double> a, pair<int, double> b);
-bool mycompindex(MyData a, MyData b);
+bool mycomp_label(pair<int, double> a, pair<int, double> b);
+bool mycomp_index(MyData a, MyData b);
+bool compfunc_mydata(pair<MyData, double> a, pair<MyData, double> b);
+bool compfunc_dispair(pair<vector<pair<int, double>>, double> a, pair<vector<pair<int, double>>, double> b);
+bool compfunc_descend(pair<int, double> a, pair<int, double> b);
+
 int checkResult(vector<int> &result, vector<MyData> &T);
 double calDistance(MyData a, MyData b, int dis_type);
 double euDistance(MyData a, MyData b);
