@@ -10,8 +10,8 @@ int main() {
 
 	//---user define params---
 	string datalist[] = {"d1_s","breast_s","diabetes_s","ecoli_s","cleveland_s"};
-	string prefix = "C:\\Users\\Hubert\\Desktop\\CS_project\\testData2\\";
-	//string folder = "C:\\Users\\Administrator\\Documents\\GitHub\\CS_project_ML\\matrix\\";
+	string prefix = "C:\\Users\\Administrator\\Desktop\\testData2\\";
+	string folder = "C:\\Users\\Administrator\\Documents\\GitHub\\CS_project_ML\\matrix\\";
 	int k = 1;
 	int fold_num = 50;
 	//------------------------
@@ -40,7 +40,7 @@ int main() {
 			inverseout << stransd.getScore() << endl;
 		
 			//ClusterSemi
-			/*ClusterSemi Cstransd(X, XT, k);
+			ClusterSemi Cstransd(X, XT, k);
 			Cstransd.setT(T);
 			Cstransd.performTrans();
 			expout << Cstransd.getScore() << endl;
@@ -48,7 +48,7 @@ int main() {
 			{
 				CreateFolder(folder);
 				Cstransd.printSortedMatrixs(folder);
-			}*/
+			}
 			
 			//AffineSemi
 			/*NonlinearSemi ntransd(X, XT, k);
