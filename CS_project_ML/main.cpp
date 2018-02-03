@@ -93,7 +93,7 @@ int main() {
 		}
 	}
 	cout << "Data analyzing done." << endl;
-	system("pause");
+	//system("pause");
 
 	return 0;
 }
