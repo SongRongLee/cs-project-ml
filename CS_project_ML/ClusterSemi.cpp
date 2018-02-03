@@ -1,6 +1,6 @@
 #include"ClusterSemi.h"
 #include<omp.h>
-ClusterSemi::ClusterSemi(vector<MyData> &X, vector<MyData> &XT, int k) {
+ClusterSemi::ClusterSemi(vector<MyData> &X, vector<MyData> &XT, int k, string folder, bool enablePrintLabel) {
 
 	this->X = X;
 	this->XT = XT;
@@ -27,7 +27,8 @@ ClusterSemi::ClusterSemi(vector<MyData> &X, vector<MyData> &XT, int k) {
 			total_data[i].class_w_table.push_back(pair<int, double>(0, 0));
 		}
 	}
-
+	this->folder = folder;
+	this->enablePrintLabel = enablePrintLabel;
 	preTrain();
 }
 
@@ -177,7 +178,7 @@ void ClusterSemi::performTrans() {
 void ClusterSemi::getSortedMatrix(vector<vector<double>> &new_dis,int i) {
 	indexSortedMatrix(total_data, dis_matrixs[i], new_dis);
 }
-void ClusterSemi::printSortedMatrixs(string folder)
+void ClusterSemi::printSortedMatrixs()
 {
 	string outstr = "matrix";
 	for (int i = 0; i < dis_matrixs.size(); i++)
@@ -192,6 +193,24 @@ void ClusterSemi::printSortedMatrixs(string folder)
 			}
 			out << endl;
 		}
+	}
+}
+void ClusterSemi::printMatrixs(string folder)
+{
+	string outstr = "matrix";
+	
+	for (int i = 0; i < dis_matrixs.size(); i++)
+	{
+
+		vector<vector<double>> sorted_dis_matrix;
+		ofstream out(folder + outstr + to_string(i) + ".txt");
+		for (int i = 0; i < sorted_dis_matrix.size(); i++) {
+			for (int j = 0; j < sorted_dis_matrix[i].size(); j++) {
+				out << left << fixed << setprecision(18) << setw(21) << sorted_dis_matrix[i][j];
+			}
+			out << endl;
+		}
+		
 	}
 }
 double ClusterSemi::getScore() {
@@ -247,6 +266,14 @@ void ClusterSemi::performTrans(vector<vector<vector<double>>> &dis_matrixs, vect
 			vector<double> dis_vector(dis_matrix[i].begin(), dis_matrix[i].end());
 			total_data[i].knn_label = knn.bayesprediction(total_data[i], dis_vector);
 		}
+		
+		if (enablePrintLabel == true)
+		{
+			string outstr = "knn";
+			ofstream out(folder + outstr + to_string(rc+1) + ".txt");
+			printlabel(total_data, out);
+		}
+			
 		//set bayes knn results
 		/*if (rc == 0)
 		{
@@ -345,5 +372,8 @@ void ClusterSemi::performTrans(vector<vector<vector<double>>> &dis_matrixs, vect
 			//cout << "KnnBayesTransD done by 1-NN and 1mi match." << endl;
 			break;
 		}
+		
 	}
+
+	
 }

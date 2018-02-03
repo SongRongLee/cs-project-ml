@@ -35,4 +35,5 @@ void CreateFolder(const string  path);
 void printDismatrix(vector<vector<double>> &dis_matrix, ofstream &out);
 void printTestDis(vector<vector<vector<double>>> dis_matrixs,int num, const vector<MyData> &total_data);
 void printTestDis(vector<vector<vector<double>>> dis_matrixs, int num, const vector<MyData> &total_data, ofstream &out);
+void printlabel(vector<MyData> &total_data, ofstream &out);
 #endif

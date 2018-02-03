@@ -11,7 +11,7 @@ int main() {
 	//---user define params---
 	string datalist[] = {"d1_s","breast_s","diabetes_s","ecoli_s","cleveland_s"};
 	string prefix = "C:\\Users\\Administrator\\Desktop\\testData2\\";
-	string folder = "C:\\Users\\Administrator\\Documents\\GitHub\\CS_project_ML\\matrix\\";
+	string folder = "C:\\Users\\Administrator\\Documents\\GitHub\\CS_project_ML\\plot\\matrix\\";
 	int k = 1;
 	int fold_num = 50;
 	//------------------------
@@ -34,20 +34,23 @@ int main() {
 			//extractData(X, T, dirname, i);
 
 			//SemiTransD
-			KnnBayesSemi stransd(X, XT, k);
+			/*KnnBayesSemi stransd(X, XT, k);
 			stransd.setT(T);
 			stransd.performTrans();
 			inverseout << stransd.getScore() << endl;
-		
+		*/
 			//ClusterSemi
-			ClusterSemi Cstransd(X, XT, k);
+			if (i == 1)
+			{
+				CreateFolder(folder + datalist[j] + "\\");
+			}
+			ClusterSemi Cstransd(X, XT, k, folder+datalist[j]+"\\",i==1);
 			Cstransd.setT(T);
 			Cstransd.performTrans();
 			expout << Cstransd.getScore() << endl;
 			if (i == 1)
 			{
-				CreateFolder(folder);
-				Cstransd.printSortedMatrixs(folder);
+				Cstransd.printSortedMatrixs();
 			}
 			
 			//AffineSemi
