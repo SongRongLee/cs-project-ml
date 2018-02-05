@@ -203,7 +203,7 @@ void printTestDis(vector<vector<vector<double>>> dis_matrixs, int num, const vec
 	}
 
 }
-void printlabel(vector<MyData>& total_data, ofstream &out)
+void printlabel(vector<MyData>& total_data, ofstream &outknn, ofstream &outreal)
 {
 	int j = -1;
 	int k = 0;
@@ -213,11 +213,13 @@ void printlabel(vector<MyData>& total_data, ofstream &out)
 		for (int i = 0; i < total_data.size(); i++)
 		{	if(total_data[i].num==j+1)
 			{
-				if (total_data[i].real_label != total_data[i].knn_label)
+				/*if (total_data[i].real_label != total_data[i].knn_label)
 					out << 1 << ' ';
 				else
 					out << 0 << ' ';
-				
+				*/
+				outreal << total_data[i].real_label << ' ';
+				outknn << total_data[i].knn_label << ' ';
 				j++;
 				k++;
 				//cout << total_data[i].num << ' ';

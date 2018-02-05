@@ -269,9 +269,10 @@ void ClusterSemi::performTrans(vector<vector<vector<double>>> &dis_matrixs, vect
 		
 		if (enablePrintLabel == true)
 		{
-			string outstr = "knn";
-			ofstream out(folder + outstr + to_string(rc+1) + ".txt");
-			printlabel(total_data, out);
+			
+			ofstream outknn(folder + "knn" + to_string(rc+1) + ".txt");
+			ofstream outreal(folder + "real" + to_string(rc + 1) + ".txt");
+			printlabel(total_data, outknn, outreal);
 		}
 			
 		//set bayes knn results
