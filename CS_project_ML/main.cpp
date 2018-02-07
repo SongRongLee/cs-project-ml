@@ -9,7 +9,7 @@ using namespace std;
 int main() {
 
 	//---user define params---
-	string datalist[] = {"d1_s","breast_s","diabetes_s","ecoli_s","cleveland_s"};
+	string datalist[] = {"d1_s","breast_s","ecoli_s","diabetes_s","cleveland_s"};
 	string prefix = "C:\\Users\\Administrator\\Desktop\\testData2\\";
 	string folder = "C:\\Users\\Administrator\\Documents\\GitHub\\CS_project_ML\\plot\\matrix\\";
 	int k = 1;
@@ -51,6 +51,7 @@ int main() {
 			if (i == 1)
 			{
 				Cstransd.printSortedMatrixs();
+				
 			}
 			
 			//AffineSemi

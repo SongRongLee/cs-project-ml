@@ -164,6 +164,7 @@ void ClusterSemi::performTrans() {
 		out << final_dis;
 		out.close();*/
 	}
+
 	//maybe wrong
 	/*for (int i = 0; i < T.size(); i++)
 	{
@@ -189,7 +190,7 @@ void ClusterSemi::printSortedMatrixs()
 		ofstream out(folder+outstr + to_string(i) + ".txt");
 		for (int i = 0; i < sorted_dis_matrix.size(); i++) {
 			for (int j = 0; j < sorted_dis_matrix[i].size(); j++) {
-				out << left << fixed << setprecision(18) << setw(21) << sorted_dis_matrix[i][j];
+				out << left << fixed << setprecision(18) << setw(21) << sorted_dis_matrix[i][j]+1;
 			}
 			out << endl;
 		}
@@ -226,6 +227,13 @@ double ClusterSemi::getScore() {
 		vector<double> dis_vector(dis_matrixs[dis_matrixs.size() - 1][i].begin(), dis_matrixs[dis_matrixs.size() - 1][i].begin() + train_data_size);
 		//results.push_back(adaptive_knn.adaptive_prediction(total_data[i], dis_vector));
 		results.push_back(adaptive_knn.prediction(total_data[i], dis_vector));
+	}
+	if (enablePrintLabel == true)
+	{
+
+		ofstream outknn(folder + "knn_included_test" + ".txt");
+		ofstream outreal(folder + "real_included_test" + ".txt");
+		printlabel(total_data, outknn, outreal, results);
 	}
 	double wrong_count = checkResult(results, T);
 	return (double)(T.size() - wrong_count) / (double)T.size() * 100;

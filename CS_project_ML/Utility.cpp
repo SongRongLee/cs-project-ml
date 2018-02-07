@@ -225,11 +225,48 @@ void printlabel(vector<MyData>& total_data, ofstream &outknn, ofstream &outreal)
 				//cout << total_data[i].num << ' ';
 				break;
 			}
-			if(i== total_data.size()-1)
+			if (i == total_data.size() - 1)
+			{
+				outknn << -1 << ' ';
 				j++;
+			}
 		}
 
 		
+	}
+}
+void printlabel(vector<MyData>& total_data, ofstream &outknn, ofstream &outreal, vector<int> results)
+{
+	int j = -1;
+	int k = 0;
+	int count = 0;
+	while (k<total_data.size())
+	{
+
+		for (int i = 0; i < total_data.size(); i++)
+		{
+			if (total_data[i].num == j + 1)
+			{
+				/*if (total_data[i].real_label != total_data[i].knn_label)
+				out << 1 << ' ';
+				else
+				out << 0 << ' ';
+				*/
+				outreal << total_data[i].real_label << ' ';
+				if(total_data[i].knn_label!=-1)
+					outknn << total_data[i].knn_label << ' ';
+				else
+					outknn << results[count++] << ' ';
+				j++;
+				k++;
+				//cout << total_data[i].num << ' ';
+				break;
+			}
+			if (i == total_data.size() - 1)
+				j++;
+		}
+
+
 	}
 }
 /*void printTestDis(vector<vector<vector<double>>> dis_matrixs,int num , const vector<MyData> &total_data, ofstream &out) {
