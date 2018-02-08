@@ -157,6 +157,7 @@ void ClusterSemi::performTrans() {
 		for (int j = 0; j < train_data_size; j++)
 		{
 			dis_matrixs[dis_matrixs.size() - 1][i][j] = final_dis(j, 0);
+			dis_matrixs[dis_matrixs.size() - 1][j][i] = final_dis(j, 0);
 		}
 		//output new dis
 		/*string title = "testing_dis_inverse" + to_string(T[i- train_data_size].num) + ".txt";
@@ -264,11 +265,8 @@ void ClusterSemi::performTrans(vector<vector<vector<double>>> &dis_matrixs, vect
 
 		//cout << "Round " << rc + 1 << " ." << endl;
 
-		//create thread
-		vector<thread> threads;
-		vector<vector<pair<int, double>>> tmpknn_result;
-		KNNClassifier knn(total_data, k);
 		//get knn class weight and label	
+		KNNClassifier knn(total_data, k);
 #pragma omp parallel for
 		for (int i = X.size(); i < total_data.size(); i++) {
 			vector<double> dis_vector(dis_matrix[i].begin(), dis_matrix[i].end());

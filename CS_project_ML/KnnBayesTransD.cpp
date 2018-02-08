@@ -18,15 +18,7 @@ KnnBayesTransD::KnnBayesTransD(vector<MyData> &X, vector<MyData> &T, int k) {
 		}
 	}
 }
-void KnnBayesTransD::predict_thread(int n, KNNClassifier knn) {
-	//get knn class weight and label	
-	for (int i = X.size(); i < total_data.size(); i++) {
-		if (i % THREAD_NUM == n) {
-			vector<double> dis_vector(dis_matrix[i].begin(), dis_matrix[i].end());
-			total_data[i].knn_label = knn.bayesprediction(total_data[i], dis_vector);
-		}		
-	}
-}
+
 void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, vector<int> &knn_results) {
 
 	double v = 0.1;
@@ -47,17 +39,14 @@ void KnnBayesTransD::performTrans(vector<vector<vector<double>>> &dis_matrixs, v
 
 		//cout << "Round " << rc + 1 << " ." << endl;
 
-		//create thread
-		vector<thread> threads;
-		vector<vector<pair<int, double>>> tmpknn_result;
+		//get knn class weight and label	
 		KNNClassifier knn(total_data, k);
-		for (int i = 0; i < THREAD_NUM; i++) {
-			threads.push_back(thread(&KnnBayesTransD::predict_thread, this, i, knn));
+#pragma omp parallel for
+		for (int i = X.size(); i < total_data.size(); i++) {
+			vector<double> dis_vector(dis_matrix[i].begin(), dis_matrix[i].end());
+			total_data[i].knn_label = knn.bayesprediction(total_data[i], dis_vector);
 		}
-		//join thread
-		for (int i = 0; i < THREAD_NUM; i++) {
-			threads[i].join();
-		}		
+
 		//set bayes knn results
 		for (int i = X.size(); i < total_data.size(); i++) {
 			knn_results[i - X.size()] = total_data[i].knn_label;
