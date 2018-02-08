@@ -10,10 +10,10 @@ int main() {
 
 	//---user define params---
 	string datalist[] = {"d1_s","breast_s","ecoli_s","diabetes_s","cleveland_s"};
-	string prefix = "C:\\Users\\Hubert\\Desktop\\CS_project\\testData2\\";
-	string folder = "C:\\Users\\Hubert\\Desktop\\CS_project\\CS_project_ML\\plot\\matrix\\";
-	//string prefix = "C:\\Users\\Administrator\\Desktop\\testData2\\";
-	//string folder = "C:\\Users\\Administrator\\Documents\\GitHub\\CS_project_ML\\plot\\matrix\\";
+	//string prefix = "C:\\Users\\Hubert\\Desktop\\CS_project\\testData2\\";
+	//string folder = "C:\\Users\\Hubert\\Desktop\\CS_project\\CS_project_ML\\plot\\matrix\\";
+	string prefix = "C:\\Users\\Administrator\\Desktop\\testData2\\";
+	string folder = "C:\\Users\\Administrator\\Documents\\GitHub\\CS_project_ML\\plot\\matrix\\";
 	int k = 1;
 	int fold_num = 50;
 	//------------------------
