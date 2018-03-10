@@ -20,6 +20,9 @@ private:
 	string folder;
 	void erase(int i);
 	void preTrain();
+	void calNearList(vector<vector<int>>& near_list);
+	double calw(int a, int b, vector<vector<int>>& near_list);
+	vector<vector<double>> PreCluster(vector<vector<double>> clu_dis_matrix);
 	void fillDismatrix();
 	bool enablePrintLabel;
 

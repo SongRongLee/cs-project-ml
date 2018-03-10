@@ -6,27 +6,28 @@ ClusterSemi::ClusterSemi(vector<MyData> &X, vector<MyData> &XT, int k, string fo
 	this->XT = XT;
 	this->k = k;
 	this->T = XT;
-	round_limit = 20;
+	round_limit = 30;
 	//combine data
 	total_data = X;
 	total_data.insert(total_data.end(), XT.begin(), XT.end());
 	genDismatrix(total_data, dis_matrix);
-	//set initial knn_label and class_weight
-	for (int i = 0; i < total_data.size(); i++) {
-		if (i < this->X.size()) {
-			this->X[i].knn_label = this->X[i].label;
-			this->X[i].class_w = 1;
-			this->X[i].class_w_table.push_back(pair<int, double>(this->X[i].label, 1));
-			total_data[i].knn_label = total_data[i].label;
-			total_data[i].class_w = 1;
-			total_data[i].class_w_table.push_back(pair<int, double>(total_data[i].label, 1));
+	dis_matrix = PreCluster(dis_matrix);
+		//set initial knn_label and class_weight
+		for (int i = 0; i < total_data.size(); i++) {
+			if (i < this->X.size()) {
+				this->X[i].knn_label = this->X[i].label;
+				this->X[i].class_w = 1;
+				this->X[i].class_w_table.push_back(pair<int, double>(this->X[i].label, 1));
+				total_data[i].knn_label = total_data[i].label;
+				total_data[i].class_w = 1;
+				total_data[i].class_w_table.push_back(pair<int, double>(total_data[i].label, 1));
+			}
+			else {
+				total_data[i].knn_label = total_data[i].label;
+				total_data[i].class_w = 0;
+				total_data[i].class_w_table.push_back(pair<int, double>(0, 0));
+			}
 		}
-		else {
-			total_data[i].knn_label = total_data[i].label;
-			total_data[i].class_w = 0;
-			total_data[i].class_w_table.push_back(pair<int, double>(0, 0));
-		}
-	}
 	this->folder = folder;
 	this->enablePrintLabel = enablePrintLabel;
 	preTrain();
@@ -56,6 +57,94 @@ void ClusterSemi::preTrain() {
 
 	//cout << "Pre-train done." << endl;
 }
+void ClusterSemi::calNearList(vector<vector<int>> &near_list) {
+	for (int i = 0; i < total_data.size(); i++) {
+		vector<int> tempv;
+		vector<pair<int, double>> sort_temp;
+		for (int j = 0; j < total_data.size(); j++) {
+			sort_temp.push_back(make_pair(j, dis_matrix[i][j]));
+		}
+		sort(sort_temp.begin(), sort_temp.end(), mycomp);
+		for (int j = 0; j < total_data.size(); j++) {
+			tempv.push_back(sort_temp[j].first);
+		}
+		near_list.push_back(tempv);
+	}
+}
+double ClusterSemi::calw(int a, int b, vector<vector<int>> &near_list) {
+	double gamma = 0.01;
+
+	double radius = dis_matrix[a][b];
+	double wij = 0, tmp_ratio;
+
+	//calculate wij base on a's neighbors
+	for (int i = 0; i < near_list[a].size(); i++) {
+		int p = near_list[a][i];
+		if (a != p && b != p) {
+			if (dis_matrix[a][p] > radius)break;
+			if (dis_matrix[a][p] > dis_matrix[b][p])continue;
+			tmp_ratio = dis_matrix[b][p] / dis_matrix[a][p];
+			double A = tmp_ratio - 1;
+			wij += (1 - exp(-gamma*A*A));
+		}
+	}
+
+	//calculate wij base on b's neighbors
+	for (int i = 0; i < near_list[b].size(); i++) {
+		int p = near_list[b][i];
+		if (a != p && b != p) {
+			if (dis_matrix[b][p] > radius)break;
+			if (dis_matrix[b][p] > dis_matrix[a][p])continue;
+			tmp_ratio = dis_matrix[a][p] / dis_matrix[b][p];
+			double A = tmp_ratio - 1;
+			wij += (1 - exp(-gamma*A*A));
+		}
+	}
+
+	return wij;
+}
+vector<vector<double>> ClusterSemi::PreCluster(vector<vector<double>> clu_dis_matrix)
+{
+
+	double v = 0.1;
+
+
+
+	vector<vector<int>> near_list;
+	vector<vector<double>> tmpdis;
+
+	tmpdis = clu_dis_matrix;
+	int clu_limut = 5;
+	for (int rc = 0; rc < clu_limut; rc++) {
+		double w;
+
+		//cout << "Round " << rc + 1 << " ." << endl;
+
+		calNearList(near_list);
+
+		//for each pair, calculate new dis
+		for (int i = 0; i < total_data.size(); i++) {
+			for (int j = i + 1; j < total_data.size(); j++) {
+				double f = 1;
+				//change dis					
+				w = calw(i, j, near_list);
+				f = 2 / (1 + exp(-w*v));
+				tmpdis[i][j] = clu_dis_matrix[i][j] * f;
+				tmpdis[j][i] = tmpdis[i][j];
+			}
+		}
+		clu_dis_matrix = tmpdis;
+		//record distance matrixs
+		near_list.clear();
+
+
+
+
+	}
+	return clu_dis_matrix;
+}
+
+
 
 void ClusterSemi::setT(vector<MyData> &T) {
 	//reset previous data
@@ -177,7 +266,7 @@ void ClusterSemi::performTrans() {
 	out.close();
 	}*/
 }
-void ClusterSemi::getSortedMatrix(vector<vector<double>> &new_dis,int i) {
+void ClusterSemi::getSortedMatrix(vector<vector<double>> &new_dis, int i) {
 	indexSortedMatrix(total_data, dis_matrixs[i], new_dis);
 }
 void ClusterSemi::printSortedMatrixs()
@@ -185,13 +274,13 @@ void ClusterSemi::printSortedMatrixs()
 	string outstr = "matrix";
 	for (int i = 0; i < dis_matrixs.size(); i++)
 	{
-		
+
 		vector<vector<double>> sorted_dis_matrix;
-		getSortedMatrix(sorted_dis_matrix,i);
-		ofstream out(folder+outstr + to_string(i) + ".txt");
+		getSortedMatrix(sorted_dis_matrix, i);
+		ofstream out(folder + outstr + to_string(i) + ".txt");
 		for (int i = 0; i < sorted_dis_matrix.size(); i++) {
 			for (int j = 0; j < sorted_dis_matrix[i].size(); j++) {
-				out << left << fixed << setprecision(18) << setw(21) << sorted_dis_matrix[i][j]+1;
+				out << left << fixed << setprecision(18) << setw(21) << sorted_dis_matrix[i][j] + 1;
 			}
 			out << endl;
 		}
@@ -200,7 +289,7 @@ void ClusterSemi::printSortedMatrixs()
 void ClusterSemi::printMatrixs(string folder)
 {
 	string outstr = "matrix";
-	
+
 	for (int i = 0; i < dis_matrixs.size(); i++)
 	{
 
@@ -212,7 +301,7 @@ void ClusterSemi::printMatrixs(string folder)
 			}
 			out << endl;
 		}
-		
+
 	}
 }
 double ClusterSemi::getScore() {
@@ -241,7 +330,7 @@ double ClusterSemi::getScore() {
 }
 void ClusterSemi::erase(int i) {
 	total_data.erase(total_data.begin() + i);
-	XT.erase(XT.begin() + (i-X.size()));
+	XT.erase(XT.begin() + (i - X.size()));
 	T.erase(T.begin() + (i - X.size()));
 
 }
@@ -272,15 +361,15 @@ void ClusterSemi::performTrans(vector<vector<vector<double>>> &dis_matrixs, vect
 			vector<double> dis_vector(dis_matrix[i].begin(), dis_matrix[i].end());
 			total_data[i].knn_label = knn.bayesprediction(total_data[i], dis_vector);
 		}
-		
+
 		if (enablePrintLabel == true)
 		{
-			
-			ofstream outknn(folder + "knn" + to_string(rc+1) + ".txt");
+
+			ofstream outknn(folder + "knn" + to_string(rc + 1) + ".txt");
 			ofstream outreal(folder + "real" + to_string(rc + 1) + ".txt");
 			printlabel(total_data, outknn, outreal);
 		}
-			
+
 		//set bayes knn results
 		/*if (rc == 0)
 		{
@@ -301,7 +390,7 @@ void ClusterSemi::performTrans(vector<vector<vector<double>>> &dis_matrixs, vect
 			knn_results[i - X.size()] = total_data[i].knn_label;
 		}
 
-		
+
 		//for each pair, calculate new dis
 		for (int i = 0; i < total_data.size(); i++) {
 			for (int j = i + 1; j < total_data.size(); j++) {
@@ -379,8 +468,8 @@ void ClusterSemi::performTrans(vector<vector<vector<double>>> &dis_matrixs, vect
 			//cout << "KnnBayesTransD done by 1-NN and 1mi match." << endl;
 			break;
 		}
-		
+
 	}
 
-	
+
 }
