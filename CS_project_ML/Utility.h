@@ -16,6 +16,7 @@ void extractData(vector<MyData> &X, vector<MyData> &T, string dirname, int foldn
 //for semi-supervised
 void extractData(vector<MyData> &X, vector<MyData> &XT, vector<MyData> &T, string dataname, string labelname);
 
+
 //comp functions
 bool mycomp(pair<int, double> a, pair<int, double> b);
 bool mycomp_label(pair<int, double> a, pair<int, double> b);

@@ -18,6 +18,7 @@ private:
 public:
 	KnnBayesTransD(vector<MyData> &X, vector<MyData> &T, int k);
 	void performTrans(vector<vector<vector<double>>> &dis_matrixs, vector<int> &knn_results);
+
 };
 
 #endif

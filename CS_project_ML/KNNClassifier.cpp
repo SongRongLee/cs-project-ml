@@ -62,16 +62,18 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 	{
 		double divide = 0;
 		vector<pair<int, double>> tmp;
-		int lower = 1, upper = i;
-		if (dis_pair[0].second != 0) {
-			lower = 0;
-			upper = i - 1;
+
+		//skip 0 distance
+		int lower = 0, upper = i - 1;
+		while (dis_pair[lower].second == 0) {
+			lower++;
+			if (upper < vsize - 1)upper++;
 		}
+
 		for (int j = lower; j <= upper; j++)
 		{
 			divide += 1 / dis_pair[j].second;
 		}
-
 		//exclude itself
 		for (int j = lower; j <= upper; j++)
 		{
@@ -119,10 +121,10 @@ int KNNClassifier::bayesprediction(MyData &t, vector<double> dis_vector)
 	{
 		//P(hi) = 1 / disum
 		double disum = 0;
-		int lower = 1, upper = i+1;
-		if (dis_pair[0].second != 0) {
-			lower = 0;
-			upper = i;
+		int lower = 0, upper = i;
+		while(dis_pair[lower].second == 0) {
+			lower++;
+			if (upper < vsize - 1)upper++;
 		}
 		for (int j = lower; j <= upper; j++)
 		{
@@ -304,43 +306,52 @@ int KNNClassifier::adaptive_prediction(MyData &t, vector<double> dis_vector) {
 		return -1;
 	}
 
-	vector<pair<MyData, double>> dis_pair;
+	vector<pair<int, double>> dis_pair;
 
 	for (int i = 0; i < vsize; i++) {
-		//dis_pair.push_back(pair<int, double>(X[i].label, abs(dis_vector[i])));
-		dis_pair.push_back(pair<MyData, double>(X[i], dis_vector[i]));
-	}
-
-	sort(dis_pair.begin(), dis_pair.end(), compfunc_mydata);
+		dis_pair.push_back(pair<int, double>(X[i].label, dis_vector[i]));
+	}	
 
 	map<int, double> labelcount;
 
+	//cal all label counts
 	for (int i = 0; i < vsize; i++) {
-		map<int, double>::iterator iter = labelcount.find(dis_pair[i].first.label);
+		map<int, double>::iterator iter = labelcount.find(dis_pair[i].first);
 		if (iter != labelcount.end()) {
-			labelcount[dis_pair[i].first.label] += 1 / dis_pair[i].second / dis_pair[i].second;
+			labelcount[dis_pair[i].first] += 1;
 		}
 		else {
-			labelcount[dis_pair[i].first.label] = 1 / dis_pair[i].second / dis_pair[i].second;
-		}
-		if (dis_pair[i].first.is_train) {
-			break;
+			labelcount[dis_pair[i].first] = 1;
 		}
 	}
 
+	//modify distances
+	for (int i = 0; i < vsize; i++) {
+		dis_pair[i].second /= labelcount[dis_pair[i].first];
+	}
+
+	partial_sort(dis_pair.begin(), dis_pair.begin() + k, dis_pair.end(), mycomp);
+	sort(dis_pair.begin(), dis_pair.begin() + k, mycomp_label);
+
+	int fcount = 1, maxfcount = 1;
+	int pre_class = dis_pair[0].first;
+	int max_class = pre_class;
+
+	for (int i = 1; i < k; i++) {
+		if (dis_pair[i].first == pre_class) {
+			fcount++;
+			if (fcount > maxfcount) {
+				maxfcount = fcount;
+				max_class = pre_class;
+			}
+		}
+		else {
+			fcount = 1;
+			pre_class = dis_pair[i].first;
+		}
+	}
 	//set class weight
-	double maxcount = 0;
-	double totalcount = 0;
-	int max_class = -1;
-	for (map<int, double>::iterator iter = labelcount.begin(); iter != labelcount.end(); iter++) {
-		totalcount += iter->second;
-		if (iter->second > maxcount) {
-			max_class = iter->first;
-			maxcount = iter->second;
-		}
-	}
-	t.class_w = maxcount / totalcount;
-
+	t.class_w = (double)maxfcount / (double)k;
 	return max_class;
 }
 

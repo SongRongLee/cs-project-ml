@@ -1,5 +1,6 @@
 #include"Utility.h"
 #include <windows.h>
+
 bool mycomp(pair<int, double> a, pair<int, double> b) {
 	return a.second < b.second;
 }
